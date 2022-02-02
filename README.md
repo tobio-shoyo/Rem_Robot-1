@@ -1,5 +1,6 @@
-![Rem](https://telegra.ph/file/c22a8d5b74c347be488fd.jpg)
 # Rem 𝑹𝒐𝒃𝒐𝒕
+![Rem](https://telegra.ph/file/c22a8d5b74c347be488fd.jpg)
+
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html) [![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/T-O-B-I-I/Rem_Robot/?ref=repository-badge)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/41ee9ac813a34042925a6b6fa92cf84e)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AmaanAhmed/Lynda&amp;utm_campaign=Badge_Grade) [![Join Support!](https://img.shields.io/badge/Join%20Channel-!-red)](https://t.me/Black_Knights_Union_Support) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity) [![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/T-O-B-I-I/Rem_Robot/graphs/contributors/)
 
