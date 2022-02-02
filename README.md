@@ -1,7 +1,7 @@
-![Cutiepii](https://telegra.ph/file/6db0ffa5904f5b7e286af.jpg)
-# 𝑪𝒖𝒕𝒊𝒆𝒑𝒊𝒊 𝑹𝒐𝒃𝒐𝒕
-[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html) [![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/Awesome-RJ/CutiepiiRobot/?ref=repository-badge)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/41ee9ac813a34042925a6b6fa92cf84e)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AmaanAhmed/Lynda&amp;utm_campaign=Badge_Grade) [![Join Support!](https://img.shields.io/badge/Join%20Channel-!-red)](https://t.me/Black_Knights_Union_Support) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity) [![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/Awesome-RJ/CutiepiiRobot/graphs/contributors/)
+![Rem](https://telegra.ph/file/c22a8d5b74c347be488fd.jpg)
+# Rem 𝑹𝒐𝒃𝒐𝒕
+[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html) [![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/T-O-B-I-I/Rem_Robot/?ref=repository-badge)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/41ee9ac813a34042925a6b6fa92cf84e)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AmaanAhmed/Lynda&amp;utm_campaign=Badge_Grade) [![Join Support!](https://img.shields.io/badge/Join%20Channel-!-red)](https://t.me/Black_Knights_Union_Support) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity) [![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/T-O-B-I-I/Rem_Robot/graphs/contributors/)
 
 A modular telegram Python bot running on python3 with an sqlalchemy, Redis, mongodb database.
 
@@ -16,7 +16,7 @@ A modular telegram Python bot running on python3 with an sqlalchemy, Redis, mong
 + [x] Heroku Deploy
 + [x] Docker/Local Machine
 
-╘══「 Can be found on telegram as [Cutiepii Robot](https://t.me/RemCutebot) 」
+╘══「 Can be found on telegram as [Rem Robot](https://t.me/RemCutebot) 」
 
 ## ╒═══「 Credits 」
 The bot is based of on the original work done by [PaulSonOfLars](https://github.com/PaulSonOfLars)
@@ -30,7 +30,7 @@ This repo was just reamped to suit an Anime-centric community. All original cred
 
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
-The Support group can be reached out to at [AOGIRI • Black Knights Union • Support](https://t.me/Black_Knights_Union_Support), where you can ask for help about [Rem Robot 愛](https://t.me/RemCutebot), discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
+The Support group can be reached out to at [AOGIRI • Black Knights Union • Support](https://t.me/Rem_Support), where you can ask for help about [Rem Robot](https://t.me/RemCutebot), discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
 
 <details>
 	<summary>Heroku Deploy</summary>
@@ -41,7 +41,7 @@ The Easiest Way to Deploy This Bot is Via Heroku.
 	
   <h1>
     <p align="center">
-        <a href="https://heroku.com/deploy?template=https://github.com/T-O-B-I-I/CutiepiiRobot">
+        <a href="https://heroku.com/deploy?template=https://github.com/T-O-B-I-I/Rem_Robot">
             <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
         </a>
     </p>
@@ -59,8 +59,8 @@ The Easiest Way to Deploy This Bot is Via Heroku.
 </p>
 
 ```console
-    ~$ git clone https://github.com/T-O-B-I-I/CutiepiiRobot
-    ~$ cd CutiepiiRobot
+    ~$ git clone https://github.com/T-O-B-I-I/Rem_Robot
+    ~$ cd Rem_Robot
     ~$ cp sample_config.py config.py
 ```
 
