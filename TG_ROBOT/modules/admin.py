@@ -52,7 +52,6 @@ from TG_ROBOT.modules.helper_funcs.chat_status import (
     user_can_pin,
     user_can_promote,
     ADMIN_CACHE,
-    can_manage_voice_chats,
 )
 
 from TG_ROBOT.modules.helper_funcs.extraction import (
@@ -549,7 +548,6 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
             can_promote_members=bot_member.can_promote_members,
             can_restrict_members=bot_member.can_restrict_members,
             can_pin_messages=bot_member.can_pin_messages,
-            can_manage_voice_chats=bot_member.can_manage_voice_chats,
         )
     except BadRequest as err:
         if err.message == "User_not_mutual_contact":
@@ -706,7 +704,6 @@ def demote(update: Update, context: CallbackContext) -> str:
             can_restrict_members=False,
             can_pin_messages=False,
             can_promote_members=False,
-            can_manage_voice_chats=False,
         )
         message.reply_text(
             f"Successfully demoted <b>{user_member.user.first_name or user_id}</b>!",
