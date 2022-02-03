@@ -1,386 +1,852 @@
-"""
-MIT License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/REMRobot>
-
-This file is part of @TG_ROBOT (Telegram Bot)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
-
-import logging
-import os
-import sys
+import importlib
 import time
-import spamwatch
-import httpx
-import aiohttp
-import telegram.ext as tg
-
-from pyrogram import Client, errors
-from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
-from telethon import TelegramClient
-from telethon.sessions import MemorySession
+import re
+import sys
+from sys import argv
+from typing import Optional
 from telethon.sessions import StringSession
-from motor import motor_asyncio
-from odmantic import AIOEngine
-from pymongo import MongoClient
-from pymongo.errors import ServerSelectionTimeoutError
-from redis import StrictRedis
-from Python_ARQ import ARQ
-from aiohttp import ClientSession
-from telegraph import Telegraph
+from telethon import TelegramClient
+from telethon.sessions import StringSession
 from telegram import Chat
+#https://readthedocs.org/projects/python-telegram-bot/downloads/pdf/stable/
 
-StartTime = time.time()
 
-# enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
-    level=logging.INFO,
+from TGROBOT import (
+    ALLOW_EXCL,
+    CERT_PATH,
+    DONATION_LINK,
+    LOGGER,
+    OWNER_ID,
+    PORT,
+    SUPPORT_CHAT,
+    TOKEN,
+    URL,
+    WEBHOOK,
+    SUPPORT_CHAT,
+    dispatcher,
+    StartTime,
+    telethn,
+    pbot,
+   # ubot,
+    updater,
 )
 
-LOGGER = logging.getLogger(__name__)
+# needed to dynamically load modules
+# NOTE: Module order is not guaranteed, specify that in the config file!
+from TGROBOT.modules import ALL_MODULES
+from TGROBOT.modules.helper_funcs.chat_status import is_user_admin
+from TGROBOT.modules.helper_funcs.misc import paginate_modules
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from telegram.error import (
+    BadRequest,
+    ChatMigrated,
+    NetworkError,
+    TelegramError,
+    TimedOut,
+    Unauthorized,
+)
+from telegram.ext import (
+    CallbackContext,
+    CallbackQueryHandler,
+    CommandHandler,
+    Filters,
+    MessageHandler,
+)
+from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
+from telegram.utils.helpers import escape_markdown
 
-# if version < 3.6, stop bot.
-if sys.version_info[0] < 3 or sys.version_info[1] < 6:
-    LOGGER.error(
-        "You MUST have a python version of at least 3.6! Multiple features depend on this. Bot quitting.",
-    )
-    sys.exit(1)
 
-ENV = bool(os.environ.get("ENV", False))
+def get_readable_time(seconds: int) -> str:
+    count = 0
+    ping_time = ""
+    time_list = []
+    time_suffix_list = ["s", "m", "h", "days"]
 
-if ENV:
-    TOKEN = os.environ.get("TOKEN", None)
+    while count < 4:
+        count += 1
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
 
-    try:
-        OWNER_ID = int(os.environ.get("OWNER_ID", None))
-    except ValueError:
-        raise Exception("Your OWNER_ID env variable is not a valid integer.")
+    for x in range(len(time_list)):
+        time_list[x] = str(time_list[x]) + time_suffix_list[x]
+    if len(time_list) == 4:
+        ping_time += time_list.pop() + ", "
 
-    JOIN_LOGGER = os.environ.get("JOIN_LOGGER", None)
-    OWNER_USERNAME = os.environ.get("OWNER_USERNAME", None)
+    time_list.reverse()
+    ping_time += ":".join(time_list)
 
-    try:
-        DRAGONS = {int(x) for x in os.environ.get("DRAGONS", "").split()}
-        DEV_USERS = {int(x) for x in os.environ.get("DEV_USERS", "").split()}
-    except ValueError:
-        raise Exception("Your sudo or dev users list does not contain valid integers.")
+    return ping_time
+SUP_IMG = "https://telegra.ph/file/bb8b2e4247529fe5f1e16.jpg"
+START_VID = "https://telegra.ph/file/c9f10581223f6c45d755e.jpg"
+PM_START_TEXT = """
+✧ Hɪɪ ᴍʏ ɴᴀᴍᴇ ɪs `ʀᴇᴍ` ᴀ ᴄᴜᴛᴇ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ✧
 
-    try:
-        DEMONS = {int(x) for x in os.environ.get("DEMONS", "").split()}
-    except ValueError:
-        raise Exception("Your support users list does not contain valid integers.")
+➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 
-    try:
-        WOLVES = {int(x) for x in os.environ.get("WOLVES", "").split()}
-    except ValueError:
-        raise Exception("Your whitelisted users list does not contain valid integers.")
+ᴡᴀɴᴛ ᴛᴏ ꜱᴇᴇ ᴍʏ ᴘᴏᴡᴇʀꜱ ? ᴛʏᴘᴇ /help
 
-    try:
-        TIGERS = {int(x) for x in os.environ.get("TIGERS", "").split()}
-    except ValueError:
-        raise Exception("Your scout users list does not contain valid integers.")
+➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 
-    INFOPIC = bool(os.environ.get("INFOPIC", False)) # Info Pic (use True[Value] If You Want To Show In /info.)
-    EVENT_LOGS = os.environ.get("EVENT_LOGS", None) # G-Ban Logs (Channel) (-100)
-    ERROR_LOGS = os.environ.get("ERROR_LOGS", None) # Error Logs (Channel Ya Group Choice Is Yours) (-100)
-    WEBHOOK = bool(os.environ.get("WEBHOOK", False))#Setting this to ANYTHING will enable webhooks. If you dont know how this works leave it as it is
-    URL = os.environ.get("URL", "")  # If You Deploy On Heraku. [URL PERTEN:- https://{App Name}.herokuapp.com/ || EXP:- https://yuki-REM-robot.herokuapp.com/]
-    PORT = int(os.environ.get("PORT", 8443))
-    CERT_PATH = os.environ.get("CERT_PATH")
-    API_ID = os.environ.get("API_ID", None) # Bot Owner's API_ID (From:- https://my.telegram.org/auth)
-    API_HASH = os.environ.get("API_HASH", None) # Bot Owner's API_HASH (From:- https://my.telegram.org/auth)
-    DB_URL = os.environ.get("DB_URL") # Any SQL Database Link (RECOMMENDED:- PostgreSQL & https://www.elephantsql.com)
-    DONATION_LINK = os.environ.get("DONATION_LINK") # Donation Link (ANY)
-    LOAD = os.environ.get("LOAD", "").split() # Don't Change
-    NO_LOAD = os.environ.get("NO_LOAD", "translation").split() # Don't Change
-    DEL_CMDS = bool(os.environ.get("DEL_CMDS", False)) # Don't Change
-    STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", True)) # Use `True` Value
-    WORKERS = int(os.environ.get("WORKERS", 8)) # Don't Change
-    BAN_STICKER = os.environ.get("BAN_STICKER", "CAADAgADOwADPPEcAXkko5EB3YGYAg") # Don't Change
-    ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False) # Don't Change
-    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./") # Don't Change
-    CASH_API_KEY = os.environ.get("CASH_API_KEY", None) # From:- https://www.alphavantage.co/support/#api-key
-    TIME_API_KEY = os.environ.get("TIME_API_KEY", None) # From:- https://timezonedb.com/api
-    WALL_API = os.environ.get("WALL_API", None) # From:- https://wall.alphacoders.com/api.php
-    REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None) # From:- https://www.remove.bg/
-    OPENWEATHERMAP_ID = os.environ.get("OPENWEATHERMAP_ID", "") # From:- https://openweathermap.org/api
-    GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None) # From:- http://genius.com/api-clients
-    MONGO_DB_URL = os.environ.get("MONGO_DB_URL", None) # MongoDB URL (From:- https://www.mongodb.com/)
-    REDIS_URL = os.environ.get("REDIS_URL", None) # REDIS URL (From:- Heraku & Redis)
-    BOT_ID = int(os.environ.get("BOT_ID", None)) # Telegram Bot ID (EXP:- 1241223850)
-    SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None) # Support Chat Group Link (Use @Black_Knights_Union_Support || Dont Use https://t.me/Black_Knights_Union_Support)
-    SPAMWATCH_SUPPORT_CHAT = os.environ.get("SPAMWATCH_SUPPORT_CHAT", None) # Use @SpamWatchSupport
-    SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None) # From https://t.me/SpamWatchBot 
-    BOT_USERNAME = os.environ.get("BOT_USERNAME", "") # Bot Username
-    STRING_SESSION = os.environ.get("STRING_SESSION", None) # Telethon Based String Session (2nd ID) [ From https://repl.it/@SpEcHiDe/GenerateStringSession ]
-    APP_ID = os.environ.get("APP_ID", None) # 2nd ID 
-    APP_HASH = os.environ.get("APP_HASH", None) # 2nd ID
-    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", True) # Heroku App Name 
-    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", True) # Heroku API [From https://dashboard.heroku.com/account]
-    YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", True)
-    ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
-    BOT_NAME = os.environ.get("BOT_NAME", True) # Name Of your Bot.4
-    MONGO_DB = "Rem"
-    ARQ_API_URL = "https://thearq.tech"
-    GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
-    CHROME_DRIVER = "/usr/bin/chromedriver"
-    BOT_API_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/bot")
+ᴘᴏᴡᴇʀᴇᴅ ʙʏ @AogiriNetwork
+[ㅤ](https://telegra.ph/file/0f9ea77c82c47bcf80c71.jpg)
+"""
 
-    HELP_IMG = os.environ.get("HELP_IMG", True)
-    GROUP_START_IMG = os.environ.get("GROUP_START_IMG", True)
-    REM_PHOTO = os.environ.get("REM_PHOTO", True)
+buttons = [
+
+    [
+
+        InlineKeyboardButton(
+
+            text="ꜱᴜᴍᴍᴏɴ ᴍᴇ",url=f"t.me/RemCutebot?startgroup=true"
+
+        ),
+
+    ],
+
+    [
+
+        InlineKeyboardButton(
+
+          text="ᴜᴘᴅᴀᴛᴇꜱ", url="https://t.me/Rem_updates"
+
+        ),InlineKeyboardButton(
+
+           text="ᴅᴇᴍᴏɪᴄ ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"
+
+         ),
+
+    ],
+
+    [
+
+        InlineKeyboardButton(
+
+          text="ᴅᴇᴍᴏɴꜱ ʟᴏɢꜱ", url="https://t.me/Rem_logs"
+
+        ),InlineKeyboardButton(
+
+           text="ɢʀᴏᴜᴘ", url=f"https://t.me/AnimeChatAura"
+
+         ),
+
+    ],
+
+         
+
     
-    try:
-        BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
-    except ValueError:
-        raise Exception("Your blacklisted chats list does not contain valid integers.")
 
-else:
-    from TG_ROBOT.config import Development as Config
+  [
 
-    TOKEN = Config.TOKEN
+        InlineKeyboardButton(
 
-    try:
-        OWNER_ID = int(Config.OWNER_ID)
-    except ValueError:
-        raise Exception("Your OWNER_ID variable is not a valid integer.")
+          text="❕ꜱᴘɪʀɪᴛ ᴀʀᴛꜱ❕", callback_data="help_back") , 
 
-    JOIN_LOGGER = Config.JOIN_LOGGER
-    OWNER_USERNAME = Config.OWNER_USERNAME
-    ALLOW_CHATS = Config.ALLOW_CHATS
-    try:
-        DRAGONS = {int(x) for x in Config.DRAGONS or []}
-        DEV_USERS = {int(x) for x in Config.DEV_USERS or []}
-    except ValueError:
-        raise Exception("Your sudo or dev users list does not contain valid integers.")
+ 
 
-    try:
-        DEMONS = {int(x) for x in Config.DEMONS or []}
-    except ValueError:
-        raise Exception("Your support users list does not contain valid integers.")
+                                
 
-    try:
-        WOLVES = {int(x) for x in Config.WOLVES or []}
-    except ValueError:
-        raise Exception("Your whitelisted users list does not contain valid integers.")
-
-    try:
-        TIGERS = {int(x) for x in Config.TIGERS or []}
-    except ValueError:
-        raise Exception("Your tiger users list does not contain valid integers.")
-
-
-    INFOPIC = Config.INFOPIC
-    EVENT_LOGS = Config.EVENT_LOGS 
-    ERROR_LOGS = Config.ERROR_LOGS
-    WEBHOOK = Config.WEBHOOK
-    URL = Config.URL
-    PORT = Config.PORT
-    CERT_PATH = Config.CERT_PATH
-    API_ID = Config.API_ID
-    API_HASH = Config.API_HASH
-    DB_URL = Config.DB_URL
-    DONATION_LINK = Config.DONATION_LINK
-    STRICT_GBAN = Config.STRICT_GBAN
-    WORKERS = Config.WORKERS
-    BAN_STICKER = Config.BAN_STICKER
-    TEMP_DOWNLOAD_DIRECTORY = Config.TEMP_DOWNLOAD_DIRECTORY
-    LOAD = Config.LOAD
-    NO_LOAD = Config.NO_LOAD
-    CASH_API_KEY = Config.CASH_API_KEY
-    TIME_API_KEY = Config.TIME_API_KEY
-    WALL_API = Config.WALL_API
-    MONGO_DB_URL = Config.MONGO_DB_URL
-    REDIS_URL = Config.REDIS_URL
-    SUPPORT_CHAT = Config.SUPPORT_CHAT
-    SPAMWATCH_SUPPORT_CHAT = Config.SPAMWATCH_SUPPORT_CHAT
-    SPAMWATCH_API = Config.SPAMWATCH_API
-    REM_BG_API_KEY = Config.REM_BG_API_KEY
-    OPENWEATHERMAP_ID = Config.OPENWEATHERMAP_ID
-    APP_ID = Config.APP_ID
-    APP_HASH = Config.APP_HASH
-    BOT_ID = Config.BOT_ID
-    BOT_USERNAME = Config.BOT_USERNAME
-    STRING_SESSION = Config.STRING_SESSION
-    GENIUS_API_TOKEN = Config.GENIUS_API_TOKEN
-    YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
-    ALLOW_EXCL = Config.ALLOW_EXCL
-    TEMP_DOWNLOAD_DIRECTORY = Config.TEMP_DOWNLOAD_DIRECTORY
-    ARQ_API_URL = Config.ARQ_API_URL
-    GOOGLE_CHROME_BIN = Config.GOOGLE_CHROME_BIN
-    CHROME_DRIVER = Config.CHROME_DRIVER
-    BOT_NAME = Config.BOT_NAME
-    DEL_CMDS = Config.DEL_CMDS
-    BOT_API_URL = Config.BOT_API_URL
-    MONGO_DB_URL = Config.MONGO_DB_URL
-    MONGO_DB = Config.MONGO_DB
-    HELP_IMG = Config.HELP_IMG
-    START_IMG = Config.START_IMG
-    REM_PHOTO = Config.REM_PHOTO
-
-    try:
-        BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
-    except ValueError:
-        raise Exception("Your blacklisted chats list does not contain valid integers.")
         
 
-DRAGONS.add(OWNER_ID)
-DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(1809105906)
-DEV_USERS.add(1470075895)
+    ],
 
-REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
+]
 
-try:
 
-    REDIS.ping()
+OP_STRINGS = """ How I could ever tell him...I want you by my side until I draw my last breath? """
 
-    LOGGER.info("[REM]: Connecting To Yūki • Data Center • Mumbai • Redis Database")
+CHA_VID = "https://i.pinimg.com/originals/38/26/1a/38261ac8436cac3b374cc540f111e077.gif"
+KEK= "https://i.imgur.com/3l2Cptl.mp4"
 
-except BaseException:
+HELP_STRINGS = f"""
 
-    raise Exception("[REM ERROR]: Your Yūki • Data Center • Mumbai • Redis Database Is Not Alive, Please Check Again.")
+`Hey there! My name is` `Rem`
 
-finally:
+I have Quite a Few Features, Go Ahead and Check out!"""
 
-   REDIS.ping()
 
-   LOGGER.info("[REM]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!")
+ARISE_IMG = "https://i.imgur.com/vQ4ryec.png"
+
+DONATE_STRING = """There is mo need to donate... All I seek is pawns. Join Us into @shhhilence."""
+
+IMPORTED = {}
+MIGRATEABLE = []
+HELPABLE = {}
+STATS = []
+USER_INFO = []
+DATA_IMPORT = []
+DATA_EXPORT = []
+CHAT_SETTINGS = {}
+USER_SETTINGS = {}
+
+for module_name in ALL_MODULES:
+    imported_module = importlib.import_module("TGRobot.modules." + module_name)
+    if not hasattr(imported_module, "__mod_name__"):
+        imported_module.__mod_name__ = imported_module.__name__
+
+    if imported_module.__mod_name__.lower() not in IMPORTED:
+        IMPORTED[imported_module.__mod_name__.lower()] = imported_module
     
+    if hasattr(imported_module, "__help__") and imported_module.__help__:
+        HELPABLE[imported_module.__mod_name__.lower()] = imported_module
 
-if not SPAMWATCH_API:
-    sw = None
-    LOGGER.warning("[REM ERROR]: SpamWatch API key Is Missing! Recheck Your Config.")
-else:
-    try:
-        sw = spamwatch.Client(SPAMWATCH_API)
-    except:
-        sw = None
-        LOGGER.warning("[REM ERROR]: Can't connect to SpamWatch!")
+    # Chats to migrate on chat_migrated events
+    if hasattr(imported_module, "__migrate__"):
+        MIGRATEABLE.append(imported_module)
 
+    if hasattr(imported_module, "__stats__"):
+        STATS.append(imported_module)
 
-# Credits Logger
-print("[REM] REM Is Starting. | Yūki • Black Knights Union Project | Licensed Under GPLv3.")
-print("[REM] Cutie Cutie! Successfully Connected With A  Yūki • Data Center • Mumbai")
-print("[REM] Project Maintained By: github.com/Awesome-RJ (t.me/Awesome_Rj)")
+    if hasattr(imported_module, "__user_info__"):
+        USER_INFO.append(imported_module)
 
+    if hasattr(imported_module, "__import_data__"):
+        DATA_IMPORT.append(imported_module)
 
-print("[REM]: Telegraph Installing")
-telegraph = Telegraph()
-print("[REM]: Telegraph Account Creating")
-telegraph.create_account(short_name='REM')
-updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
-print("[REM]: TELETHON CLIENT STARTING")
-telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
-dispatcher = updater.dispatcher
-print("[REM]: PYROGRAM CLIENT STARTING")
-session_name = TOKEN.split(":")[0]
-pgram = Client(
-    session_name,
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=TOKEN,
-)
-print("[REM]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
-mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
-motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
-db = motor[MONGO_DB]
-engine = AIOEngine(motor, MONGO_DB)
-print("[INFO]: INITIALZING AIOHTTP SESSION")
-aiohttpsession = ClientSession()
-# ARQ Client
-print("[INFO]: INITIALIZING ARQ CLIENT")
-arq = ARQ("https://thearq.tech", "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ", aiohttpsession)
-print("[REM]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
-ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
-print("[REM]: Connecting To Yūki • REM Userbot (t.me/Awesome_REM)")
-timeout = httpx.Timeout(40)
-http = httpx.AsyncClient(http2=True, timeout=timeout)
+    if hasattr(imported_module, "__export_data__"):
+        DATA_EXPORT.append(imported_module)
+
+    if hasattr(imported_module, "__chat_settings__"):
+        CHAT_SETTINGS[imported_module.__mod_name__.lower()] = imported_module
+
+    if hasattr(imported_module, "__user_settings__"):
+        USER_SETTINGS[imported_module.__mod_name__.lower()] = imported_module
 
 
-async def get_entity(client, entity):
-    entity_client = client
-    if not isinstance(entity, Chat):
-        try:
-            entity = int(entity)
-        except ValueError:
-            pass
-        except TypeError:
-            entity = entity.id
-        try:
-            entity = await client.get_chat(entity)
-        except (PeerIdInvalid, ChannelInvalid):
-            for pgram in apps:
-                if pgram != client:
-                    try:
-                        entity = await pgram.get_chat(entity)
-                    except (PeerIdInvalid, ChannelInvalid):
-                        pass
-                    else:
-                        entity_client = pgram
-                        break
-            else:
-                entity = await pgram.get_chat(entity)
-                entity_client = pgram
-    return entity, entity_client
-
-
-apps = [pgram]
-DRAGONS = list(DRAGONS) + list(DEV_USERS)
-DEV_USERS = list(DEV_USERS)
-WOLVES = list(WOLVES)
-DEMONS = list(DEMONS)
-TIGERS = list(TIGERS)
-
-# Load at end to ensure all prev variables have been set
-from TG_ROBOT.modules.helper_funcs.handlers import (
-    CustomCommandHandler,
-    CustomMessageHandler,
-    CustomRegexHandler,
-)
-
-# Run bot
-if HEROKU_APP_NAME is None:  # pooling mode
-    print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
-    print("Note: this is not a great way to deploy the bot in Heroku.")
-
-    updater.start_polling()
-    updater.idle()
-
-else:  # webhook mode
-    print(f"Running bot in webhook mode. Make sure that this url is correct: https://{HEROKU_APP_NAME}.herokuapp.com/")
-    updater.start_webhook(
-        listen="0.0.0.0",
-        port=PORT,
-        url_path=TOKEN,
-        webhook_url=f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}"
+# do not async
+def send_help(chat_id, text, keyboard=None):
+    if not keyboard:
+        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
+    dispatcher.bot.send_message(
+        chat_id=chat_id,
+        text=text,
+        parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=True,
+        reply_markup=keyboard,
     )
 
-    updater.idle()
 
-# make sure the regex handler can take extra kwargs
-tg.RegexHandler = CustomRegexHandler
-tg.CommandHandler = CustomCommandHandler
-tg.MessageHandler = CustomMessageHandler
+@run_async
+def test(update: Update, context: CallbackContext):
+    # pprint(eval(str(update)))
+    # update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
+    update.effective_message.reply_text("This person edited a message")
+    print(update.effective_message)
+
+
+@run_async
+def start(update: Update, context: CallbackContext):
+    args = context.args
+    uptime = get_readable_time((time.time() - StartTime))
+    if update.effective_chat.type == "private":
+        if len(args) >= 1:
+            if args[0].lower() == "help":
+                send_help(update.effective_chat.id, HELP_STRINGS)
+            elif args[0].lower().startswith("ghelp_"):
+                mod = args[0].lower().split("_", 1)[1]
+                if not HELPABLE.get(mod, False):
+                    return
+                send_help(
+                    update.effective_chat.id,
+                    HELPABLE[mod].__help__,
+                    InlineKeyboardMarkup(
+                        [[InlineKeyboardButton(text="⬅️ BACK", callback_data="help_back")]]
+                    ),
+                )
+
+            elif args[0].lower().startswith("stngs_"):
+                match = re.match("stngs_(.*)", args[0].lower())
+                chat = dispatcher.bot.getChat(match.group(1))
+
+                if is_user_admin(chat, update.effective_user.id):
+                    send_settings(match.group(1), update.effective_user.id, False)
+                else:
+                    send_settings(match.group(1), update.effective_user.id, True)
+
+            elif args[0][1:].isdigit() and "rules" in IMPORTED:
+                IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
+
+        else:
+            update.effective_message.reply_text(
+                #ARISE_IMG,
+                PM_START_TEXT,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                disable_web_page_preview=False,
+                parse_mode=ParseMode.MARKDOWN,
+                timeout=60,
+            )
+    else:
+        first_name = update.effective_user.first_name
+        update.effective_message.reply_video(
+            CHA_VID, caption= "Rem is Here For You❤\nI am Awake Since: {}".format(
+                  escape_markdown(uptime)
+            ),
+            parse_mode=ParseMode.MARKDOWN,
+            #parse_mode=ParseMode.HTML,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                  [
+                  InlineKeyboardButton(text="Help", url="t.me/RemCutebot?start=help"
+
+                                    
+
+                                )
+                  ],
+                  [
+                  InlineKeyboardButton(text="Support Group", url="https://t.me/Rem_Support"),
+                  InlineKeyboardButton(text="Anime Group", url="https://t.me/shhhilence")
+                  ]
+                ]
+            ),
+        )
+        
+
+def error_handler(update, context):
+    """Log the error and send a telegram message to notify the developer."""
+    # Log the error before we do anything else, so we can see it even if something breaks.
+    LOGGER.error(msg="Exception while handling an update:", exc_info=context.error)
+
+    # traceback.format_exception returns the usual python message about an exception, but as a
+    # list of strings rather than a single string, so we have to join them together.
+    tb_list = traceback.format_exception(
+        None, context.error, context.error.__traceback__
+    )
+    tb = "".join(tb_list)
+
+    # Build the message with some markup and additional information about what happened.
+    message = (
+        "An exception was raised while handling an update\n"
+        "<pre>update = {}</pre>\n\n"
+        "<pre>{}</pre>"
+    ).format(
+        html.escape(json.dumps(update.to_dict(), indent=2, ensure_ascii=False)),
+        html.escape(tb),
+    )
+
+    if len(message) >= 4096:
+        message = message[:4096]
+    # Finally, send the message
+    context.bot.send_message(chat_id=(OWNER_ID, SUNG_ID), text=message, parse_mode=ParseMode.HTML)
+
+
+# for test purposes
+def error_callback(update: Update, context: CallbackContext):
+    error = context.error
+    try:
+        raise error
+    except Unauthorized:
+        print("no nono1")
+        print(error)
+        # remove update.message.chat_id from conversation list
+    except BadRequest:
+        print("no nono2")
+        print("BadRequest caught")
+        print(error)
+
+        # handle malformed requests - read more below!
+    except TimedOut:
+        print("no nono3")
+        # handle slow connection problems
+    except NetworkError:
+        print("no nono4")
+        # handle other connection problems
+    except ChatMigrated as err:
+        print("no nono5")
+        print(err)
+        # the chat_id of a group has changed, use e.new_chat_id instead
+    except TelegramError:
+        print(error)
+        # handle all other telegram related errors
+
+
+@run_async
+def help_button(update, context):
+    query = update.callback_query
+    mod_match = re.match(r"help_module\((.+?)\)", query.data)
+    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
+    next_match = re.match(r"help_next\((.+?)\)", query.data)
+    back_match = re.match(r"help_back", query.data)
+
+    print(query.message.chat.id)
+
+    try:
+        if mod_match:
+            module = mod_match.group(1)
+            text = (
+                "Here is the help for the *{}* module:\n".format(
+                    HELPABLE[module].__mod_name__
+                )
+                + HELPABLE[module].__help__
+            )
+            query.message.edit_text(
+                text=text,
+                parse_mode=ParseMode.MARKDOWN,
+                disable_web_page_preview=False,
+                reply_markup=InlineKeyboardMarkup(
+                    [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                ),
+            )
+
+        elif prev_match:
+            curr_page = int(prev_match.group(1))
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(curr_page - 1, HELPABLE, "help")
+                ),
+            )
+
+        elif next_match:
+            next_page = int(next_match.group(1))
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(next_page + 1, HELPABLE, "help")
+                ),
+            )
+        elif back_match:
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(0, HELPABLE, "help")
+                ),
+            )
+
+        # ensure no spinny white circle
+        context.bot.answer_callback_query(query.id)
+        # query.message.delete()
+
+    except BadRequest:
+        pass    
+'''
+        elif back_match:
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(0, HELPABLE, "help")
+                ),
+            )
+
+        # ensure no spinny white circle
+        context.bot.answer_callback_query(query.id)
+        # query.message.delete()
+
+    except BadRequest:
+        pass
+'''
+
+@run_async
+def Arise_about_callback(update, context):
+    query = update.callback_query
+    if query.data == "Arise_":
+        query.message.edit_text(
+             text="""I'm *Rem*, a powerful group management bot built to help you manage your group easily.
+                 \n❍ I can restrict users.
+                 \n❍ I can greet users with customizable welcome messages and even set a group's rules.
+                 \n❍ I have an advanced anti-flood system.
+                 \n❍ I can warn users until they reach max warns, with each predefined actions such as ban, mute, kick, etc.
+                 \n❍ I have a note keeping system, blacklists, and even predetermined replies on certain keywords.
+                 \n❍ I check for admins' permissions before executing any command and more stuffs
+                 \n
+                 \nHere is the Contact to my hubby [◥ᎪNᏦush™◤ ](https://t.me/INTERVIER_RRRR).
+                 \n\nIf you have any question about Rem ◥ᎪNᏦush™◤ , let us know at @Rem_Support.""",
+            parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                 [
+                    InlineKeyboardButton(text="Back", callback_data="Arise_back")
+                 ]
+                ]
+            ),
+        )
+    elif query.data == "Arise_back":
+        query.message.edit_text(
+                PM_START_TEXT,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode=ParseMode.MARKDOWN,
+                timeout=60,
+                disable_web_page_preview=False,
+        )
+
+'''
+@run_async
+def Source_about_callback(update, context):
+    query = update.callback_query
+    if query.data == "source_":
+        query.message.edit_text(
+            text=""" Hi..🤗 I'm *Rem*
+                  \n [WORK IN PROGRESS](https://t.me/shhhilence) .""",
+            parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                 [
+                    InlineKeyboardButton(text="Go Back", callback_data="source_back")
+                 ]
+                ]
+            ),
+        )
+    elif query.data == "source_back":
+        query.message.edit_text(
+                PM_START_TEXT,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode=ParseMode.MARKDOWN,
+                timeout=60,
+                disable_web_page_preview=False,
+        )'''
+
+@run_async
+def get_help(update: Update, context: CallbackContext):
+    chat = update.effective_chat  # type: Optional[Chat]
+    args = update.effective_message.text.split(None, 1)
+
+    # ONLY send help in PM
+    if chat.type != chat.PRIVATE:
+        if len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
+            module = args[1].lower()
+            update.effective_message.reply_text(
+                f"Contact me in PM to get help of {module.capitalize()}",
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Help",
+                                url="t.me/{}?start=ghelp_{}".format(
+                                    context.bot.username, module
+                                ),
+                            )
+                        ]
+                    ]
+                ),
+            )
+            return
+        update.effective_message.reply_text(
+            "Contact me in PM to get the list of possible commands.",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="Help",
+                            url="t.me/{}?start=help".format(context.bot.username),
+                        )
+                    ]
+                ]
+            ),
+        )
+        return
+
+    elif len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
+        module = args[1].lower()
+        text = (
+            "Here is the available help for the *{}* module:\n".format(
+                HELPABLE[module].__mod_name__
+            )
+            + HELPABLE[module].__help__
+        )
+        send_help(
+            chat.id,
+            text,
+            InlineKeyboardMarkup(
+                [[InlineKeyboardButton(text="❖ Back ❖", callback_data="help_back")]]
+            ),
+        )
+
+    else:
+        send_help(chat.id, HELP_STRINGS)
+
+
+def send_settings(chat_id, user_id, user=False):
+    if user:
+        if USER_SETTINGS:
+            settings = "\n\n".join(
+                "*{}*:\n{}".format(mod.__mod_name__, mod.__user_settings__(user_id))
+                for mod in USER_SETTINGS.values()
+            )
+            dispatcher.bot.send_message(
+                user_id,
+                "These are your current settings:" + "\n\n" + settings,
+                parse_mode=ParseMode.MARKDOWN,
+            )
+
+        else:
+            dispatcher.bot.send_message(
+                user_id,
+                "Seems like there aren't any user specific settings available :'(",
+                parse_mode=ParseMode.MARKDOWN,
+            )
+
+    else:
+        if CHAT_SETTINGS:
+            chat_name = dispatcher.bot.getChat(chat_id).title
+            dispatcher.bot.send_message(
+                user_id,
+                text="Which module would you like to check {}'s settings for?".format(
+                    chat_name
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
+                ),
+            )
+        else:
+            dispatcher.bot.send_message(
+                user_id,
+                "Seems like there aren't any chat settings available :'(\nSend this "
+                "in a group chat you're admin in to find its current settings!",
+                parse_mode=ParseMode.MARKDOWN,
+            )
+#all done ig
+
+@run_async
+def settings_button(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user = update.effective_user
+    bot = context.bot
+    mod_match = re.match(r"stngs_module\((.+?),(.+?)\)", query.data)
+    prev_match = re.match(r"stngs_prev\((.+?),(.+?)\)", query.data)
+    next_match = re.match(r"stngs_next\((.+?),(.+?)\)", query.data)
+    back_match = re.match(r"stngs_back\((.+?)\)", query.data)
+    try:
+        if mod_match:
+            chat_id = mod_match.group(1)
+            module = mod_match.group(2)
+            chat = bot.get_chat(chat_id)
+            text = "*{}* has the following settings for the *{}* module:\n\n".format(
+                escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__
+            ) + CHAT_SETTINGS[module].__chat_settings__(chat_id, user.id)
+            query.message.reply_text(
+                text=text,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Back",
+                                callback_data="stngs_back({})".format(chat_id),
+                            )
+                        ]
+                    ]
+                ),
+            )
+
+        elif prev_match:
+            chat_id = prev_match.group(1)
+            curr_page = int(prev_match.group(2))
+            chat = bot.get_chat(chat_id)
+            query.message.reply_text(
+                "Hi there! There are quite a few settings for {} - go ahead and pick what "
+                "you're interested in.".format(chat.title),
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(
+                        curr_page - 1, CHAT_SETTINGS, "stngs", chat=chat_id
+                    )
+                ),
+            )
+
+        elif next_match:
+            chat_id = next_match.group(1)
+            next_page = int(next_match.group(2))
+            chat = bot.get_chat(chat_id)
+            query.message.reply_text(
+                "Hi there! There are quite a few settings for {} - go ahead and pick what "
+                "you're interested in.".format(chat.title),
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(
+                        next_page + 1, CHAT_SETTINGS, "stngs", chat=chat_id
+                    )
+                ),
+            )
+
+        elif back_match:
+            chat_id = back_match.group(1)
+            chat = bot.get_chat(chat_id)
+            query.message.reply_text(
+                text="Hi there! There are quite a few settings for {} - go ahead and pick what "
+                "you're interested in.".format(escape_markdown(chat.title)),
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
+                ),
+            )
+
+        # ensure no spinny white circle
+        bot.answer_callback_query(query.id)
+        query.message.delete()
+    except BadRequest as excp:
+        if excp.message not in [
+            "Message is not modified",
+            "Query_id_invalid",
+            "Message can't be deleted",
+        ]:
+            LOGGER.exception("Exception in settings buttons. %s", str(query.data))
+
+
+@run_async
+def get_settings(update: Update, context: CallbackContext):
+    chat = update.effective_chat  # type: Optional[Chat]
+    user = update.effective_user  # type: Optional[User]
+    msg = update.effective_message  # type: Optional[Message]
+
+    # ONLY send settings in PM
+    if chat.type != chat.PRIVATE:
+        if is_user_admin(chat, user.id):
+            text = "Click here to get this chat's settings, as well as yours."
+            msg.reply_text(
+                text,
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Settings",
+                                url="t.me/{}?start=stngs_{}".format(
+                                    context.bot.username, chat.id
+                                ),
+                            )
+                        ]
+                    ]
+                ),
+            )
+        else:
+            text = "Click here to check your settings."
+
+    else:
+        send_settings(chat.id, user.id, True)
+
+
+@run_async
+def donate(update: Update, context: CallbackContext):
+    user = update.effective_message.from_user
+    chat = update.effective_chat  # type: Optional[Chat]
+    bot = context.bot
+    if chat.type == "private":
+        update.effective_message.reply_text(
+            DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
+        )
+
+        if OWNER_ID != 254318997 and DONATION_LINK:
+            update.effective_message.reply_text(
+                "You can also donate to the person currently running me "
+                "[here]({})".format(DONATION_LINK),
+                parse_mode=ParseMode.MARKDOWN,
+            )
+
+    else:
+        try:
+            bot.send_message(
+                user.id,
+                DONATE_STRING,
+                parse_mode=ParseMode.MARKDOWN,
+                disable_web_page_preview=True,
+            )
+
+            update.effective_message.reply_text(
+                "I've PM'ed you about donating to my creator!"
+            )
+        except Unauthorized:
+            update.effective_message.reply_text(
+                "Contact me in PM first to get donation information."
+            )
+
+
+def migrate_chats(update: Update, context: CallbackContext):
+    msg = update.effective_message  # type: Optional[Message]
+    if msg.migrate_to_chat_id:
+        old_chat = update.effective_chat.id
+        new_chat = msg.migrate_to_chat_id
+    elif msg.migrate_from_chat_id:
+        old_chat = msg.migrate_from_chat_id
+        new_chat = update.effective_chat.id
+    else:
+        return
+
+    LOGGER.info("Migrating from %s, to %s", str(old_chat), str(new_chat))
+    for mod in MIGRATEABLE:
+        mod.__migrate__(old_chat, new_chat)
+
+    LOGGER.info("Successfully migrated!")
+    raise DispatcherHandlerStop
+
+
+def main():
+
+    if SUPPORT_CHAT is not None and isinstance(SUPPORT_CHAT, str):
+        try:
+            dispatcher.bot.sendMessage(
+                f"@{SUPPORT_CHAT}",
+                "[I'm at your service master 💕](https://telegra.ph/file/22442ad08abcc8db857c3.jpg)",
+                parse_mode=ParseMode.MARKDOWN,
+            )
+        except Unauthorized:
+            LOGGER.warning(
+                "Bot isnt able to send message to support_chat, go and check!"
+            )
+        except BadRequest as e:
+            LOGGER.warning(e.message)
+
+    test_handler = CommandHandler("test", test)
+    start_handler = CommandHandler("start", start)
+
+    help_handler = CommandHandler("help", get_help)
+    help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*")
+
+    settings_handler = CommandHandler("settings", get_settings)
+    settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_")
+
+    about_callback_handler = CallbackQueryHandler(Arise_about_callback, pattern=r"Arise_")
+    #source_callback_handler = CallbackQueryHandler(Source_about_callback, pattern=r"source_")
+
+    donate_handler = CommandHandler("donate", donate)
+    migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats)
+
+    # dispatcher.add_handler(test_handler)
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(help_handler)
+    dispatcher.add_handler(about_callback_handler)
+    #dispatcher.add_handler(source_callback_handler)
+    dispatcher.add_handler(settings_handler)
+    dispatcher.add_handler(help_callback_handler)
+    dispatcher.add_handler(settings_callback_handler)
+    dispatcher.add_handler(migrate_handler)
+    dispatcher.add_handler(donate_handler)
+
+    dispatcher.add_error_handler(error_callback)
+
+    if WEBHOOK:
+        LOGGER.info("Using webhooks.")
+        updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
+
+        if CERT_PATH:
+            updater.bot.set_webhook(url=URL + TOKEN, certificate=open(CERT_PATH, "rb"))
+        else:
+            updater.bot.set_webhook(url=URL + TOKEN)
+
+    else:
+        LOGGER.info("The Shadow Monarch Awaits")
+        updater.start_polling(timeout=15, read_latency=4, clean=True)
+
+    if len(argv) not in (1, 3, 4):
+        telethn.disconnect()
+    else:
+        telethn.run_until_disconnected()
+
+    updater.idle()
+"""   
+try:
+    ubot.start()
+except BaseException:
+    print("Userbot Error ! Have you added a STRING_SESSION in deploying??")
+    sys.exit(1)
+ """   
+
+if __name__ == '__main__':
+    LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
+    telethn.start(bot_token=TOKEN)
+    pbot.start()
+    main()
+    idle()
