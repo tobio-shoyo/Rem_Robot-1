@@ -3,9 +3,9 @@ MIT License
 
 Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/REMRobot>
+Copyright (c) 2021, AOGIRI, <https://github.com/ T-O-B-I-I/REM_Robot>
 
-This file is part of @TG_ROBOT (Telegram Bot)
+This file is part of @Rem_ROBOT (Telegram Bot)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -97,10 +97,10 @@ from telethon import Button, events
 @telethn.on(events.NewMessage(pattern="/alive"))
 async def awake(event):
   REM = event.sender.first_name
-  REM = "**♡ I,m REM Robot 愛** \n\n"
+  REM = "**♡ I,m REM Robot ** \n\n"
   REM += "**♡ I'm Working With Awesome Speed**\n\n"
   REM += "**♡ REM: LATEST Version**\n\n"
-  REM += "**♡ My Creator:** [Rajkumar](t.me/Awesome_RJ)\n\n"
+  REM += "**♡ My Creator:** [ANKSUH](t.me/INTERVIER_RRRR)\n\n"
   REM += "**♡ python-Telegram-Bot: 13.7**\n\n"
   REM_BUTTON = [
       [
@@ -144,14 +144,16 @@ HELP_MSG = "Click the button below to get help manu in your pm."
 START_MSG = "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
     
 PM_START_TEXT = """
-────「 [{}](https://telegra.ph/file/2909a312d9438798d237a.png) 」────
+────「 [{}](https://telegra.ph/file/0f9ea77c82c47bcf80c71.jpg) 」────
 *Hola! {},*
-*I am an Anime themed advance group management bot with a lot of Sexy Features.*
+✧ *ᴍʏ ɴᴀᴍᴇ ɪs `ʀᴇᴍ` ᴀ ᴄᴜᴛᴇ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ* ✧
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 • *Uptime:* `{}`
 • `{}` *users, across* `{}` *chats.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 ➛ Try The Help Buttons Below To Know My Abilities ××
+
+ᴘᴏᴡᴇʀᴇᴅ ʙʏ @AogiriNetwork
 """
 
 GROUP_START_TEXT = """
@@ -160,25 +162,26 @@ Haven't slept since: {}
 """
 
 buttons = [
+
     [
-                        InlineKeyboardButton(
-                            text=f"Add {BOT_NAME} To Your Group",
-                            url=f"t.me/{BOT_USERNAME}?startgroup=true")
-                    ],
-                   [
-                       InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
-                       InlineKeyboardButton(text="❔ Chit Chat", url="https://t.me/HindiKDrama"),
-                       InlineKeyboardButton(text="[► Inline ◄]", switch_inline_query_current_chat=""),
-                     ],
-                    [                  
-                       InlineKeyboardButton(
-                             text="🚑 Support",
-                             url=f"https://t.me/{SUPPORT_CHAT}"),
-                       InlineKeyboardButton(
-                             text="📢 Updates",
-                             url="https://t.me/Black_Knights_Union")
-                     ], 
-    ]
+        InlineKeyboardButton(text="ꜱᴜᴍᴍᴏɴ ᴍᴇ",url=f"t.me/RemCutebot?startgroup=true"),
+    ],
+
+    [
+        InlineKeyboardButton(text="ᴜᴘᴅᴀᴛᴇꜱ", url="https://t.me/Rem_updates"),
+        InlineKeyboardButton(text="ᴅᴇᴍᴏɪᴄ ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
+    ],
+
+    [
+        InlineKeyboardButton(text="ᴅᴇᴍᴏɴꜱ ʟᴏɢꜱ", url="https://t.me/Rem_logs" ),
+        InlineKeyboardButton(text="ɢʀᴏᴜᴘ", url=f"https://t.me/AnimeChatAura"),
+    ],
+
+  [   
+      InlineKeyboardButton(text="❕ꜱᴘɪʀɪᴛ ᴀʀᴛꜱ❕", callback_data="help_back") , 
+    ],
+
+]
 
                     
 HELP_STRINGS = """
@@ -275,7 +278,7 @@ def start(update: Update, context: CallbackContext):
                     update.effective_chat.id,
                     HELPABLE[mod].__help__,
                     InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
+                        [[InlineKeyboardButton(text="[Back]", callback_data="help_back")]]
                     ),
                 )
 
@@ -319,7 +322,7 @@ def start(update: Update, context: CallbackContext):
                         ),
                         InlineKeyboardButton(
                             text="📢 Updates",
-                            url="https://telegram.dog/Black_Knights_Union",
+                            url="https://telegram.dog/Rem_updates",
                         ),
                     ]
                 ]
@@ -455,7 +458,7 @@ def REM_callback_data(update, context):
             reply_markup=InlineKeyboardMarkup(
                 [
                  [
-                    InlineKeyboardButton(text="[► Back ◄]", callback_data="REM_back")
+                    InlineKeyboardButton(text="[ Back ]", callback_data="REM_back")
                  ]
                 ]
             ),
@@ -511,7 +514,7 @@ def get_help(update, context):
             chat.id,
             text,
             InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
+                [[InlineKeyboardButton(text="[ Back ]", callback_data="help_back")]]
             ),
         )
 
