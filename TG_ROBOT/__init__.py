@@ -105,13 +105,13 @@ if ENV:
     INFOPIC = bool(os.environ.get("INFOPIC", False)) # Info Pic (use True[Value] If You Want To Show In /info.)
     EVENT_LOGS = os.environ.get("EVENT_LOGS", None) # G-Ban Logs (Channel) (-100)
     ERROR_LOGS = os.environ.get("ERROR_LOGS", None) # Error Logs (Channel Ya Group Choice Is Yours) (-100)
-    WEBHOOK = bool(os.environ.get("WEBHOOK", False))
+    WEBHOOK = bool(os.environ.get("WEBHOOK", False))#Setting this to ANYTHING will enable webhooks. If you dont know how this works leave it as it is
     URL = os.environ.get("URL", "")  # If You Deploy On Heraku. [URL PERTEN:- https://{App Name}.herokuapp.com/ || EXP:- https://yuki-REM-robot.herokuapp.com/]
-    PORT = int(os.environ.get("PORT", 8443)) 
+    PORT = int(os.environ.get("PORT", 5000))
     CERT_PATH = os.environ.get("CERT_PATH")
     API_ID = os.environ.get("API_ID", None) # Bot Owner's API_ID (From:- https://my.telegram.org/auth)
     API_HASH = os.environ.get("API_HASH", None) # Bot Owner's API_HASH (From:- https://my.telegram.org/auth)
-    DB_URL = os.environ.get("DB_URL") # Any SQL Database Link (RECOMMENDED:- PostgreSQL & https://www.elephantsql.com)
+    DB_URL = os.environ.get("DATABASE_URL") # Any SQL Database Link (RECOMMENDED:- PostgreSQL & https://www.elephantsql.com)
     DONATION_LINK = os.environ.get("DONATION_LINK") # Donation Link (ANY)
     LOAD = os.environ.get("LOAD", "").split() # Don't Change
     NO_LOAD = os.environ.get("NO_LOAD", "translation").split() # Don't Change
