@@ -41,7 +41,7 @@ from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
 from telegram.utils.helpers import escape_markdown, mention_html
 
-from TGRobot import (
+from TG_ROBOT import (
     DEV_USERS,
     SUNG_ID,
     OWNER_ID,
@@ -53,15 +53,15 @@ from TGRobot import (
     dispatcher,
     sw,
 )
-from TGRobot.__main__ import STATS, TOKEN, USER_INFO
-import TGRobot.modules.sql.userinfo_sql as sql
-from TGRobot.modules.disable import DisableAbleCommandHandler
-from TGRobot.modules.sql.global_bans_sql import is_user_gbanned
-from TGRobot.modules.sql.afk_sql import is_afk, check_afk_status
-from TGRobot.modules.sql.users_sql import get_user_num_chats
-from TGRobot.modules.helper_funcs.chat_status import sudo_plus
-from TGRobot.modules.helper_funcs.extraction import extract_user
-from TGRobot import telethn as RemTelethonClient, TIGERS, DRAGONS, DEMONS
+from TG_ROBOT.__main__ import STATS, TOKEN, USER_INFO
+import TG_ROBOT.modules.sql.userinfo_sql as sql
+from TG_ROBOT.modules.disable import DisableAbleCommandHandler
+from TG_ROBOT.modules.sql.global_bans_sql import is_user_gbanned
+from TG_ROBOT.modules.sql.afk_sql import is_afk, check_afk_status
+from TG_ROBOT.modules.sql.users_sql import get_user_num_chats
+from TG_ROBOT.modules.helper_funcs.chat_status import sudo_plus
+from TG_ROBOT.modules.helper_funcs.extraction import extract_user
+from TG_ROBOT import telethn as RemTelethonClient, TIGERS, DRAGONS, DEMONS
 
 DENJI_PIC = "https://images4.alphacoders.com/112/1126211.jpg"
 LOL_VID = "https://i.imgur.com/O5QUqH5.mp4"
