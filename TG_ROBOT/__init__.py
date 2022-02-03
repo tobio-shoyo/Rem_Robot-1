@@ -111,7 +111,7 @@ if ENV:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
 
 else:
-    from TGRobot.config import Development as Config
+    from TG_ROBOT.config import Development as Config
 
     TOKEN = Config.TOKEN
 
@@ -235,7 +235,7 @@ DEMONS = list(DEMONS)
 TIGERS = list(TIGERS)
 
 # Load at end to ensure all prev variables have been set
-from TGRobot.modules.helper_funcs.handlers import (
+from TG_ROBOT.modules.helper_funcs.handlers import (
     CustomCommandHandler,
     CustomMessageHandler,
     CustomRegexHandler,
