@@ -362,7 +362,7 @@ from TG_ROBOT.modules.helper_funcs.handlers import (
 )
 
 # Run bot
-if not HEROKU_APP_NAME:  # pooling mode
+if HEROKU_APP_NAME is None:  # pooling mode
     print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
     print("Note: this is not a great way to deploy the bot in Heroku.")
 
@@ -374,10 +374,11 @@ else:  # webhook mode
     updater.start_webhook(
         listen="0.0.0.0",
         port=PORT,
-        url_path=TOKEN,
-        updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
-        
-# updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}")
+        url_path=TELEGRAM_TOKEN,
+        webhook_url=f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}"
+    )
+
+    updater.idle()
 
 # make sure the regex handler can take extra kwargs
 tg.RegexHandler = CustomRegexHandler
