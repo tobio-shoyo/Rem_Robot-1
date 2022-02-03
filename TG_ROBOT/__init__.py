@@ -27,7 +27,7 @@ from TG_ROBOT import (
     StartTime,
     telethn,
     pbot,
-   # ubot,
+    ubot,
     updater,
 )
 
