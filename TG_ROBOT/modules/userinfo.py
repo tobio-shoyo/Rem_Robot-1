@@ -326,25 +326,25 @@ def info(update: Update, context: CallbackContext):
     disaster_level_present = False
 
     if user.id == OWNER_ID:
-        text += "\n\nThe Disaster level of this person is 'God'."
+        text += f"\n\n Disaster level of{html.escape(user.first_name)} is a Divine Dragon  '❖Owner❖'. "
         disaster_level_present = True
     elif user.id in DEV_USERS:
-        text += "\n\nThis user is member of 'Black Knights Union'."
+        text += "\n\nDisaster level of this user is one of Half Elf (Devs)."
         disaster_level_present = True
     elif user.id in DRAGONS:
-        text += "\n\nThe Disaster level of this person is 'Dragon'."
+        text += "\n\nDisaster level of this user is Oni✧ Sudos ✧' "
         disaster_level_present = True
     elif user.id in DEMONS:
-        text += "\n\nThe Disaster level of this person is 'Demon'."
+        text += "\n\nDisaster level of this user is a Reincarnated human (Demons). \n "
         disaster_level_present = True
     elif user.id in TIGERS:
-        text += "\n\nThe Disaster level of this person is 'Tiger'."
+        text += "\n\nDisaster level of this person is Wild beasts (Tigers) ꜱᴇʀᴘᴇɴᴛ ᴏꜰ ᴛʜᴇ ᴀʙʏꜱꜱ. \n"
         disaster_level_present = True
     elif user.id in WOLVES:
-        text += "\n\nThe Disaster level of this person is 'Wolf'."
+        text += "\n\nThis is the Wild beasts (Wolfs). \n "
         disaster_level_present = True
-    elif user.id == 1482952149:
-         text += "\n\nCo-Owner Of A Bot. Queen Of @Awesome_RJ. Bot Name Inspired From 'Rabeeka'."
+    elif user.id == 2142457633:
+         text += "\n\nCo-Owner Of The Bot.
          disaster_level_present = True
 
     if disaster_level_present:
