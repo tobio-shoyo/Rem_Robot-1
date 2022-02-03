@@ -1,246 +1,224 @@
-# ZeldrisRobot
-# Copyright (C) 2017-2019, Paul Larsen
-# Copyright (c) 2021, IDNCoderX Team, <https://github.com/IDN-C-X/ZeldrisRobot>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+"""
+MIT License
+
+Copyright (C) 2017-2019, Paul Larsen
+Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+
+This file is part of @TG_ROBOT (Telegram Bot)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
 
 import threading
 
-from sqlalchemy import (
-    Column,
-    UnicodeText,
-    String,
-    ForeignKey,
-    UniqueConstraint,
-    func,
-)
-from sqlalchemy.sql.sqltypes import BigInteger
-from TG_ROBOT import dispatcher
-from TG_ROBOT.modules.sql import BASE, SESSION
+from sqlalchemy import func, distinct, Column, String, UnicodeText, BigInteger
+
+from TG_ROBOT.modules.sql import SESSION, BASE
 
 
-class Users(BASE):
-    __tablename__ = "users"
-    user_id = Column(BigInteger, primary_key=True)
-    username = Column(UnicodeText)
-
-    def __init__(self, user_id, username=None):
-        self.user_id = user_id
-        self.username = username
-
-    def __repr__(self):
-        return "<User {} ({})>".format(self.username, self.user_id)
-
-
-class Chats(BASE):
-    __tablename__ = "chats"
+class BlackListFilters(BASE):
+    __tablename__ = "blacklist"
     chat_id = Column(String(14), primary_key=True)
-    chat_name = Column(UnicodeText, nullable=False)
+    trigger = Column(UnicodeText, primary_key=True, nullable=False)
 
-    def __init__(self, chat_id, chat_name):
+    def __init__(self, chat_id, trigger):
+        self.chat_id = str(chat_id)  # ensure string
+        self.trigger = trigger
+
+    def __repr__(self):
+        return "<Blacklist filter '%s' for %s>" % (self.trigger, self.chat_id)
+
+    def __eq__(self, other):
+        return bool(
+            isinstance(other, BlackListFilters)
+            and self.chat_id == other.chat_id
+            and self.trigger == other.trigger,
+        )
+
+
+class BlacklistSettings(BASE):
+    __tablename__ = "blacklist_settings"
+    chat_id = Column(String(14), primary_key=True)
+    blacklist_type = Column(BigInteger, default=1)
+    value = Column(UnicodeText, default="0")
+
+    def __init__(self, chat_id, blacklist_type=1, value="0"):
         self.chat_id = str(chat_id)
-        self.chat_name = chat_name
+        self.blacklist_type = blacklist_type
+        self.value = value
 
     def __repr__(self):
-        return "<Chat {} ({})>".format(self.chat_name, self.chat_id)
-
-
-class ChatMembers(BASE):
-    __tablename__ = "chat_members"
-    priv_chat_id = Column(BigInteger, primary_key=True)
-    # NOTE: Use dual primary key instead of private primary key?
-    chat = Column(
-        String(14),
-        ForeignKey("chats.chat_id", onupdate="CASCADE", ondelete="CASCADE"),
-        nullable=False,
-    )
-    user = Column(
-        BigInteger,
-        ForeignKey("users.user_id", onupdate="CASCADE", ondelete="CASCADE"),
-        nullable=False,
-    )
-    __table_args__ = (UniqueConstraint("chat", "user", name="_chat_members_uc"),)
-
-    def __init__(self, chat, user):
-        self.chat = chat
-        self.user = user
-
-    def __repr__(self):
-        return "<Chat user {} ({}) in chat {} ({})>".format(
-            self.user.username,
-            self.user.user_id,
-            self.chat.chat_name,
-            self.chat.chat_id,
+        return "<{} will executing {} for blacklist trigger.>".format(
+            self.chat_id, self.blacklist_type,
         )
 
 
-Users.__table__.create(checkfirst=True)
-Chats.__table__.create(checkfirst=True)
-ChatMembers.__table__.create(checkfirst=True)
+BlackListFilters.__table__.create(checkfirst=True)
+BlacklistSettings.__table__.create(checkfirst=True)
 
-INSERTION_LOCK = threading.RLock()
+BLACKLIST_FILTER_INSERTION_LOCK = threading.RLock()
+BLACKLIST_SETTINGS_INSERTION_LOCK = threading.RLock()
+
+CHAT_BLACKLISTS = {}
+CHAT_SETTINGS_BLACKLISTS = {}
 
 
-def ensure_bot_in_db():
-    with INSERTION_LOCK:
-        bot = Users(dispatcher.bot.id, dispatcher.bot.username)
-        SESSION.merge(bot)
+def add_to_blacklist(chat_id, trigger):
+    with BLACKLIST_FILTER_INSERTION_LOCK:
+        blacklist_filt = BlackListFilters(str(chat_id), trigger)
+
+        SESSION.merge(blacklist_filt)  # merge to avoid duplicate key issues
         SESSION.commit()
-
-
-def update_user(user_id, username, chat_id=None, chat_name=None):
-    with INSERTION_LOCK:
-        user = SESSION.query(Users).get(user_id)
-        if not user:
-            user = Users(user_id, username)
-            SESSION.add(user)
-            SESSION.flush()
+        global CHAT_BLACKLISTS
+        if CHAT_BLACKLISTS.get(str(chat_id), set()) == set():
+            CHAT_BLACKLISTS[str(chat_id)] = {trigger}
         else:
-            user.username = username
+            CHAT_BLACKLISTS.get(str(chat_id), set()).add(trigger)
 
-        if not chat_id or not chat_name:
+
+def rm_from_blacklist(chat_id, trigger):
+    with BLACKLIST_FILTER_INSERTION_LOCK:
+        blacklist_filt = SESSION.query(BlackListFilters).get((str(chat_id), trigger))
+        if blacklist_filt:
+            if trigger in CHAT_BLACKLISTS.get(str(chat_id), set()):  # sanity check
+                CHAT_BLACKLISTS.get(str(chat_id), set()).remove(trigger)
+
+            SESSION.delete(blacklist_filt)
             SESSION.commit()
-            return
+            return True
 
-        chat = SESSION.query(Chats).get(str(chat_id))
-        if not chat:
-            chat = Chats(str(chat_id), chat_name)
-            SESSION.add(chat)
-            SESSION.flush()
+        SESSION.close()
+        return False
 
-        else:
-            chat.chat_name = chat_name
 
-        member = (
-            SESSION.query(ChatMembers)
-            .filter(ChatMembers.chat == chat.chat_id, ChatMembers.user == user.user_id)
-            .first()
+def get_chat_blacklist(chat_id):
+    return CHAT_BLACKLISTS.get(str(chat_id), set())
+
+
+def num_blacklist_filters():
+    try:
+        return SESSION.query(BlackListFilters).count()
+    finally:
+        SESSION.close()
+
+
+def num_blacklist_chat_filters(chat_id):
+    try:
+        return (
+            SESSION.query(BlackListFilters.chat_id)
+            .filter(BlackListFilters.chat_id == str(chat_id))
+            .count()
         )
-        if not member:
-            chat_member = ChatMembers(chat.chat_id, user.user_id)
-            SESSION.add(chat_member)
+    finally:
+        SESSION.close()
 
+
+def num_blacklist_filter_chats():
+    try:
+        return SESSION.query(func.count(distinct(BlackListFilters.chat_id))).scalar()
+    finally:
+        SESSION.close()
+
+
+def set_blacklist_strength(chat_id, blacklist_type, value):
+    # for blacklist_type
+    # 0 = nothing
+    # 1 = delete
+    # 2 = warn
+    # 3 = mute
+    # 4 = kick
+    # 5 = ban
+    # 6 = tban
+    # 7 = tmute
+    with BLACKLIST_SETTINGS_INSERTION_LOCK:
+        global CHAT_SETTINGS_BLACKLISTS
+        curr_setting = SESSION.query(BlacklistSettings).get(str(chat_id))
+        if not curr_setting:
+            curr_setting = BlacklistSettings(
+                chat_id, blacklist_type=int(blacklist_type), value=value,
+            )
+
+        curr_setting.blacklist_type = int(blacklist_type)
+        curr_setting.value = str(value)
+        CHAT_SETTINGS_BLACKLISTS[str(chat_id)] = {
+            "blacklist_type": int(blacklist_type),
+            "value": value,
+        }
+
+        SESSION.add(curr_setting)
         SESSION.commit()
 
 
-def get_userid_by_name(username):
+def get_blacklist_setting(chat_id):
     try:
-        return (
-            SESSION.query(Users)
-            .filter(func.lower(Users.username) == username.lower())
-            .all()
-        )
+        setting = CHAT_SETTINGS_BLACKLISTS.get(str(chat_id))
+        if setting:
+            return setting["blacklist_type"], setting["value"]
+        return 1, "0"
+
     finally:
         SESSION.close()
 
 
-def get_name_by_userid(user_id):
+def __load_chat_blacklists():
+    global CHAT_BLACKLISTS
     try:
-        return SESSION.query(Users).get(Users.user_id == int(user_id)).first()
+        chats = SESSION.query(BlackListFilters.chat_id).distinct().all()
+        for (chat_id,) in chats:  # remove tuple by ( ,)
+            CHAT_BLACKLISTS[chat_id] = []
+
+        all_filters = SESSION.query(BlackListFilters).all()
+        for x in all_filters:
+            CHAT_BLACKLISTS[x.chat_id] += [x.trigger]
+
+        CHAT_BLACKLISTS = {x: set(y) for x, y in CHAT_BLACKLISTS.items()}
+
     finally:
         SESSION.close()
 
 
-def get_chat_members(chat_id):
+def __load_chat_settings_blacklists():
+    global CHAT_SETTINGS_BLACKLISTS
     try:
-        return SESSION.query(ChatMembers).filter(ChatMembers.chat == str(chat_id)).all()
-    finally:
-        SESSION.close()
+        chats_settings = SESSION.query(BlacklistSettings).all()
+        for x in chats_settings:  # remove tuple by ( ,)
+            CHAT_SETTINGS_BLACKLISTS[x.chat_id] = {
+                "blacklist_type": x.blacklist_type,
+                "value": x.value,
+            }
 
-
-def get_all_chats():
-    try:
-        return SESSION.query(Chats).all()
-    finally:
-        SESSION.close()
-
-
-def get_user_num_chats(user_id):
-    try:
-        return (
-            SESSION.query(ChatMembers).filter(ChatMembers.user == int(user_id)).count()
-        )
-    finally:
-        SESSION.close()
-
-
-def num_chats():
-    try:
-        return SESSION.query(Chats).count()
-    finally:
-        SESSION.close()
-
-
-def num_users():
-    try:
-        return SESSION.query(Users).count()
     finally:
         SESSION.close()
 
 
 def migrate_chat(old_chat_id, new_chat_id):
-    with INSERTION_LOCK:
-        chat = SESSION.query(Chats).get(str(old_chat_id))
-        if chat:
-            chat.chat_id = str(new_chat_id)
-            SESSION.add(chat)
-
-        SESSION.flush()
-
-        chat_members = (
-            SESSION.query(ChatMembers)
-            .filter(ChatMembers.chat == str(old_chat_id))
+    with BLACKLIST_FILTER_INSERTION_LOCK:
+        chat_filters = (
+            SESSION.query(BlackListFilters)
+            .filter(BlackListFilters.chat_id == str(old_chat_id))
             .all()
         )
-        for member in chat_members:
-            member.chat = str(new_chat_id)
-            SESSION.add(member)
-
+        for filt in chat_filters:
+            filt.chat_id = str(new_chat_id)
         SESSION.commit()
 
 
-
-
-
-def del_user(user_id):
-    with INSERTION_LOCK:
-        curr = SESSION.query(Users).get(user_id)
-        if curr:
-            SESSION.delete(curr)
-            SESSION.commit()
-            return True
-
-        ChatMembers.query.filter(ChatMembers.user == user_id).delete()
-        SESSION.commit()
-        SESSION.close()
-    return False
-
-
-def rem_chat(chat_id):
-    with INSERTION_LOCK:
-        chat = SESSION.query(Chats).get(str(chat_id))
-        if chat:
-            SESSION.delete(chat)
-            SESSION.commit()
-        else:
-            SESSION.close()
-
-def get_user_com_chats(user_id):
-    try:
-        chat_members = (
-            SESSION.query(ChatMembers).filter(ChatMembers.user == int(user_id)).all()
-        )
-        return [i.chat for i in chat_members]
-    finally:
-        SESSION.close()
+__load_chat_blacklists()
+__load_chat_settings_blacklists()
