@@ -1,34 +1,6 @@
-"""
-MIT License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
-
-This file is part of @TG_ROBOT (Telegram Bot)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
-
 import threading
 
-from sqlalchemy import func, distinct, Column, String, UnicodeText, BigInteger
+from sqlalchemy import func, distinct, Column, String, UnicodeText, Integer
 
 from TG_ROBOT.modules.sql import SESSION, BASE
 
@@ -49,14 +21,14 @@ class BlackListFilters(BASE):
         return bool(
             isinstance(other, BlackListFilters)
             and self.chat_id == other.chat_id
-            and self.trigger == other.trigger,
+            and self.trigger == other.trigger
         )
 
 
 class BlacklistSettings(BASE):
     __tablename__ = "blacklist_settings"
     chat_id = Column(String(14), primary_key=True)
-    blacklist_type = Column(BigInteger, default=1)
+    blacklist_type = Column(Integer, default=1)
     value = Column(UnicodeText, default="0")
 
     def __init__(self, chat_id, blacklist_type=1, value="0"):
@@ -66,7 +38,7 @@ class BlacklistSettings(BASE):
 
     def __repr__(self):
         return "<{} will executing {} for blacklist trigger.>".format(
-            self.chat_id, self.blacklist_type,
+            self.chat_id, self.blacklist_type
         )
 
 
@@ -152,7 +124,7 @@ def set_blacklist_strength(chat_id, blacklist_type, value):
         curr_setting = SESSION.query(BlacklistSettings).get(str(chat_id))
         if not curr_setting:
             curr_setting = BlacklistSettings(
-                chat_id, blacklist_type=int(blacklist_type), value=value,
+                chat_id, blacklist_type=int(blacklist_type), value=value
             )
 
         curr_setting.blacklist_type = int(blacklist_type)
@@ -171,7 +143,8 @@ def get_blacklist_setting(chat_id):
         setting = CHAT_SETTINGS_BLACKLISTS.get(str(chat_id))
         if setting:
             return setting["blacklist_type"], setting["value"]
-        return 1, "0"
+        else:
+            return 1, "0"
 
     finally:
         SESSION.close()
