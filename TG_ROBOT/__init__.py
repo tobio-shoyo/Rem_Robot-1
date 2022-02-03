@@ -303,6 +303,7 @@ pgram = Client(
     api_hash=API_HASH,
     bot_token=TOKEN,
 )
+print("[REM]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
 # Run bot
 if not HEROKU_APP_NAME:  # pooling mode
     print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
