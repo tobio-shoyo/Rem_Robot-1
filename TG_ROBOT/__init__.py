@@ -266,6 +266,8 @@ telegraph.create_account(short_name='REM')
 updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
 print("[REM]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
+pbot = Client("makimapbot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
+print("Rem Ubot")
 dispatcher = updater.dispatcher
 print("[REM]: PYROGRAM CLIENT STARTING")
 session_name = TOKEN.split(":")[0]
