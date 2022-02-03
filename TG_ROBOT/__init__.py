@@ -319,7 +319,6 @@ else:  # webhook mode
         url_path=TOKEN,
         updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
         
-    )
 
 #    updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}")
     updater.idle()
