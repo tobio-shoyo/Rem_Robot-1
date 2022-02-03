@@ -346,6 +346,21 @@ async def get_entity(client, entity):
                 entity_client = pgram
     return entity, entity_client
 
+
+apps = [pgram]
+DRAGONS = list(DRAGONS) + list(DEV_USERS)
+DEV_USERS = list(DEV_USERS)
+WOLVES = list(WOLVES)
+DEMONS = list(DEMONS)
+TIGERS = list(TIGERS)
+
+# Load at end to ensure all prev variables have been set
+from TG_ROBOT.modules.helper_funcs.handlers import (
+    CustomCommandHandler,
+    CustomMessageHandler,
+    CustomRegexHandler,
+)
+
 # Run bot
 if not HEROKU_APP_NAME:  # pooling mode
     print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
@@ -362,21 +377,7 @@ else:  # webhook mode
         url_path=TOKEN,
         updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
         
-#    updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}")
-
-apps = [pgram]
-DRAGONS = list(DRAGONS) + list(DEV_USERS)
-DEV_USERS = list(DEV_USERS)
-WOLVES = list(WOLVES)
-DEMONS = list(DEMONS)
-TIGERS = list(TIGERS)
-
-# Load at end to ensure all prev variables have been set
-from TG_ROBOT.modules.helper_funcs.handlers import (
-    CustomCommandHandler,
-    CustomMessageHandler,
-    CustomRegexHandler,
-)
+# updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}")
 
 # make sure the regex handler can take extra kwargs
 tg.RegexHandler = CustomRegexHandler
