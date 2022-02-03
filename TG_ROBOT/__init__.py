@@ -319,23 +319,6 @@ print("[REM]: Connecting To Yūki • REM Userbot (t.me/Awesome_REM)")
 timeout = httpx.Timeout(40)
 http = httpx.AsyncClient(http2=True, timeout=timeout)
 
-# Run bot
-if not HEROKU_APP_NAME:  # pooling mode
-    print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
-    print("Note: this is not a great way to deploy the bot in Heroku.")
-
-    updater.start_polling()
-    updater.idle()
-
-else:  # webhook mode
-    print(f"Running bot in webhook mode. Make sure that this url is correct: https://{HEROKU_APP_NAME}.herokuapp.com/")
-    updater.start_webhook(
-        listen="0.0.0.0",
-        port=PORT,
-        url_path=TOKEN,
-        updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
-        
-#    updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}")
 
 async def get_entity(client, entity):
     entity_client = client
@@ -362,6 +345,24 @@ async def get_entity(client, entity):
                 entity = await pgram.get_chat(entity)
                 entity_client = pgram
     return entity, entity_client
+
+# Run bot
+if not HEROKU_APP_NAME:  # pooling mode
+    print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
+    print("Note: this is not a great way to deploy the bot in Heroku.")
+
+    updater.start_polling()
+    updater.idle()
+
+else:  # webhook mode
+    print(f"Running bot in webhook mode. Make sure that this url is correct: https://{HEROKU_APP_NAME}.herokuapp.com/")
+    updater.start_webhook(
+        listen="0.0.0.0",
+        port=PORT,
+        url_path=TOKEN,
+        updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
+        
+#    updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}")
 
 apps = [pgram]
 DRAGONS = list(DRAGONS) + list(DEV_USERS)
