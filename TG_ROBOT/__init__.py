@@ -304,6 +304,21 @@ pgram = Client(
     bot_token=TOKEN,
 )
 print("[REM]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
+mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
+motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
+db = motor[MONGO_DB]
+engine = AIOEngine(motor, MONGO_DB)
+print("[INFO]: INITIALZING AIOHTTP SESSION")
+aiohttpsession = ClientSession()
+# ARQ Client
+print("[INFO]: INITIALIZING ARQ CLIENT")
+arq = ARQ("https://thearq.tech", "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ", aiohttpsession)
+print("[REM]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
+ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
+print("[REM]: Connecting To Yūki • REM Userbot (t.me/Awesome_REM)")
+timeout = httpx.Timeout(40)
+http = httpx.AsyncClient(http2=True, timeout=timeout)
+
 # Run bot
 if not HEROKU_APP_NAME:  # pooling mode
     print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
@@ -321,21 +336,6 @@ else:  # webhook mode
         updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
         
 #    updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}")
-        
-mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
-motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
-db = motor[MONGO_DB]
-engine = AIOEngine(motor, MONGO_DB)
-print("[INFO]: INITIALZING AIOHTTP SESSION")
-aiohttpsession = ClientSession()
-# ARQ Client
-print("[INFO]: INITIALIZING ARQ CLIENT")
-arq = ARQ("https://thearq.tech", "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ", aiohttpsession)
-print("[REM]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
-ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
-print("[REM]: Connecting To Yūki • REM Userbot (t.me/Awesome_REM)")
-timeout = httpx.Timeout(40)
-http = httpx.AsyncClient(http2=True, timeout=timeout)
 
 async def get_entity(client, entity):
     entity_client = client
