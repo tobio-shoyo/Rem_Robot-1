@@ -182,7 +182,7 @@ CHAT_SETTINGS = {}
 USER_SETTINGS = {}
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module("TGRobot.modules." + module_name)
+    imported_module = importlib.import_module("TG_ROBOT.modules." + module_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
@@ -328,7 +328,7 @@ def error_handler(update, context):
     if len(message) >= 4096:
         message = message[:4096]
     # Finally, send the message
-    context.bot.send_message(chat_id=(OWNER_ID, SUNG_ID), text=message, parse_mode=ParseMode.HTML)
+    context.bot.send_message(chat_id=(OWNER_ID), text=message, parse_mode=ParseMode.HTML)
 
 
 # for test purposes
