@@ -26,8 +26,8 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.sql.sqltypes import BigInteger
-from TGRobot import dispatcher
-from TGRobot.modules.sql import BASE, SESSION
+from TG_Robot import dispatcher
+from TG_Robot.modules.sql import BASE, SESSION
 
 
 class Users(BASE):
