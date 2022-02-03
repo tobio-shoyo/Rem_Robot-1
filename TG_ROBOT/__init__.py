@@ -189,37 +189,61 @@ else:
     #APP_HASHX = Config.APP_HASHX
     
     try:
-        BL_CHATS = set(int(x) for x in Config.BL_CHATS or [])
+        BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
     except ValueError:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
+        
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(OWNER_ID)
-DRAGONS.add(SUNG_ID)
-DEV_USERS.add(SUNG_ID)
-DEV_USERS.add(SUNG_ID)
-DEV_USERS.add(1007196749)
-DRAGONS.add(1007196749)
+DEV_USERS.add(1809105906)
+DEV_USERS.add(1470075895)
+
+REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
+
+try:
+
+    REDIS.ping()
+
+    LOGGER.info("[REM]: Connecting To Yūki • Data Center • Mumbai • Redis Database")
+
+except BaseException:
+
+    raise Exception("[REM ERROR]: Your Yūki • Data Center • Mumbai • Redis Database Is Not Alive, Please Check Again.")
+
+finally:
+
+   REDIS.ping()
+
+   LOGGER.info("[REM]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!")
+    
 
 if not SPAMWATCH_API:
     sw = None
-    LOGGER.warning("SpamWatch API key missing! recheck your config.")
+    LOGGER.warning("[REM ERROR]: SpamWatch API key Is Missing! Recheck Your Config.")
 else:
     try:
         sw = spamwatch.Client(SPAMWATCH_API)
     except:
         sw = None
-        LOGGER.warning("Can't connect to SpamWatch!")
+        LOGGER.warning("[REM ERROR]: Can't connect to SpamWatch!")
 
 
-updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
+# Credits Logger
+print("[REM] REM Is Starting. | Yūki • Black Knights Union Project | Licensed Under GPLv3.")
+print("[REM] Cutie Cutie! Successfully Connected With A  Yūki • Data Center • Mumbai")
+print("[REM] Project Maintained By: github.com/Awesome-RJ (t.me/Awesome_Rj)")
+
+
+print("[REM]: Telegraph Installing")
+telegraph = Telegraph()
+print("[REM]: Telegraph Account Creating")
+telegraph.create_account(short_name='REM')
+updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
+print("[REM]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
-pbot = Client("makimapbot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
-print("Rem Ubot")
-ubot = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
 dispatcher = updater.dispatcher
-
+print("[REM]: PYROGRAM CLIENT STARTING")
 session_name = TOKEN.split(":")[0]
 pgram = Client(
     session_name,
@@ -227,7 +251,49 @@ pgram = Client(
     api_hash=API_HASH,
     bot_token=TOKEN,
 )
+print("[REM]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
+mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
+motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
+db = motor[MONGO_DB]
+engine = AIOEngine(motor, MONGO_DB)
+print("[INFO]: INITIALZING AIOHTTP SESSION")
+aiohttpsession = ClientSession()
+# ARQ Client
+print("[INFO]: INITIALIZING ARQ CLIENT")
+arq = ARQ("https://thearq.tech", "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ", aiohttpsession)
+print("[REM]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
+ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
+print("[REM]: Connecting To Yūki • REM Userbot (t.me/Awesome_REM)")
+timeout = httpx.Timeout(40)
+http = httpx.AsyncClient(http2=True, timeout=timeout)
 
+async def get_entity(client, entity):
+    entity_client = client
+    if not isinstance(entity, Chat):
+        try:
+            entity = int(entity)
+        except ValueError:
+            pass
+        except TypeError:
+            entity = entity.id
+        try:
+            entity = await client.get_chat(entity)
+        except (PeerIdInvalid, ChannelInvalid):
+            for pgram in apps:
+                if pgram != client:
+                    try:
+                        entity = await pgram.get_chat(entity)
+                    except (PeerIdInvalid, ChannelInvalid):
+                        pass
+                    else:
+                        entity_client = pgram
+                        break
+            else:
+                entity = await pgram.get_chat(entity)
+                entity_client = pgram
+    return entity, entity_client
+
+apps = [pgram]
 DRAGONS = list(DRAGONS) + list(DEV_USERS)
 DEV_USERS = list(DEV_USERS)
 WOLVES = list(WOLVES)
