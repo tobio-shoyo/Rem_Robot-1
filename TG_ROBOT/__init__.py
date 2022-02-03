@@ -11,7 +11,7 @@ from telegram import Chat
 #https://readthedocs.org/projects/python-telegram-bot/downloads/pdf/stable/
 
 
-from TGROBOT import (
+from TG_ROBOT import (
     ALLOW_EXCL,
     CERT_PATH,
     DONATION_LINK,
@@ -33,9 +33,9 @@ from TGROBOT import (
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
-from TGROBOT.modules import ALL_MODULES
-from TGROBOT.modules.helper_funcs.chat_status import is_user_admin
-from TGROBOT.modules.helper_funcs.misc import paginate_modules
+from TG_ROBOT.modules import ALL_MODULES
+from TG_ROBOT.modules.helper_funcs.chat_status import is_user_admin
+from TG_ROBOT.modules.helper_funcs.misc import paginate_modules
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.error import (
     BadRequest,
