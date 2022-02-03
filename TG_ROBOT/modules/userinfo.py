@@ -553,46 +553,58 @@ def __user_info__(user_id):
 
 
 __help__ = """
-*Away from group*
- ❍ /afk <reason>*:* mark yourself as AFK(away from keyboard).
- ❍ brb <reason>*:* same as the afk command - but not a command.
-When marked as AFK, any mentions will be replied to with a message to say you're not available!
-
 *ID:*
- ❍ /id*:* get the current group id. If used by replying to a message, gets that user's id.
- ❍ /gifid*:* reply to a gif to me to tell you its file ID.
-
-*Self addded information:* 
- ❍ /setme <text>*:* will set your info
- ❍ /me*:* will get your or another user's info.
-*Examples:* 💡
- ➩ /setme I am a Devil.
- ➩ /me @username(defaults to yours if no user specified)
-
-*Information others add on you:* 
- ❍ /bio*:* will get your or another user's bio. This cannot be set by yourself.
- ❍ /setbio <text>*:* while replying, will save another user's bio 
-*Examples:* 💡
- ➩ /bio @username(defaults to yours if not specified).`
- ➩ /setbio This user is a wolf` (reply to the user)
-
-*Overall Information about you:*
- ❍ /info*:* get information about a user. 
+ • `/id`*:* get the current group id. If used by replying to a message, gets that user's id.
+ • `/gifid`*:* reply to a gif to me to tell you its file ID.
  
+*Self addded information:* 
+ • `/setme <text>`*:* will set your info
+ • `/me`*:* will get your or another user's info.
+Examples:
+ `/setme I am a wolf.`
+ `/me @username(defaults to yours if no user specified)`
+ 
+*Information others add on you:* 
+ • `/bio`*:* will get your or another user's bio. This cannot be set by yourself.
+• `/setbio <text>`*:* while replying, will save another user's bio 
+Examples:
+ `/bio @username(defaults to yours if not specified).`
+ `/setbio This user is a wolf` (reply to the user)
+ 
+*Overall Information about you:*
+ • `/info`*:* get information about a user. 
+ 
+*◢ Intellivoid SpamProtection:*
+ • `/spwinfo`*:* SpamProtection Info
+ 
+*json Detailed info:*
+ • `/json`*:* Get Detailed info about any message.
+ 
+*Covid info:*
+ • `/covid`*:* Get Detailed info about Covid.
+ 
+*ARQ Statistics:*
+ /arq : ARQ API Stats.
+ 
+*AFk:*
+When marked as AFK, any mentions will be replied to with a message stating that you're not available!
+ • `/afk <reason>`*:* Mark yourself as AFK.
+  - brb <reason>: Same as the afk command, but not a command.\n 
+  
 *What is that health thingy?*
- See this [HP System explained](https://telegra.ph/Sung-Jin-Woo-09-10)
+ Come and see [HP System explained](https://t.me/Black_Knights_Union/33)
 """
 
-SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio)
-GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio)
+SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio, run_async=True)
+GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio, run_async=True)
 
-STATS_HANDLER = CommandHandler("stats", stats)
-ID_HANDLER = DisableAbleCommandHandler("id", get_id)
-GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid)
-INFO_HANDLER = DisableAbleCommandHandler(("info", "book"), info)
+STATS_HANDLER = CommandHandler(["stats", "statistics"], stats, run_async=True)
+ID_HANDLER = DisableAbleCommandHandler("id", get_id, run_async=True)
+GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid, run_async=True)
+INFO_HANDLER = DisableAbleCommandHandler("info", info, run_async=True)
 
-SET_ABOUT_HANDLER = DisableAbleCommandHandler("setme", set_about_me)
-GET_ABOUT_HANDLER = DisableAbleCommandHandler("me", about_me)
+SET_ABOUT_HANDLER = DisableAbleCommandHandler("setme", set_about_me, run_async=True)
+GET_ABOUT_HANDLER = DisableAbleCommandHandler("me", about_me, run_async=True)
 
 dispatcher.add_handler(STATS_HANDLER)
 dispatcher.add_handler(ID_HANDLER)
@@ -603,7 +615,7 @@ dispatcher.add_handler(GET_BIO_HANDLER)
 dispatcher.add_handler(SET_ABOUT_HANDLER)
 dispatcher.add_handler(GET_ABOUT_HANDLER)
 
-__mod_name__ = "Infos"
+__mod_name__ = "Info & AFK"
 __command_list__ = ["setbio", "bio", "setme", "me", "info"]
 __handlers__ = [
     ID_HANDLER,
@@ -615,4 +627,3 @@ __handlers__ = [
     GET_ABOUT_HANDLER,
     STATS_HANDLER,
 ]
-      
