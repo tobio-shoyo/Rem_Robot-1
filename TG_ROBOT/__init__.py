@@ -214,7 +214,7 @@ else:
 
 
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
-telethn = TelegramClient("makima", API_ID, API_HASH)
+telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 pbot = Client("makimapbot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
 print("Rem Ubot")
 ubot = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
