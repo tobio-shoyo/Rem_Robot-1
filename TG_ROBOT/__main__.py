@@ -2,10 +2,10 @@
 MIT License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, AOGIRI, <https://github.com/ T-O-B-I-I/REM_Robot>
+Copyright (C) 2021 T-O-B-I-I
+Copyright (c) 2021, AOGIRI, <https://github.com/T-O-B-I-I/REM_Robot>
 
-This file is part of @Rem_ROBOT (Telegram Bot)
+This file is part of @RemCutebot (Telegram Bot)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
