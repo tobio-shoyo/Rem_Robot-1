@@ -391,7 +391,7 @@ def info(update: Update, context: CallbackContext):
                         ],
                         [
                             InlineKeyboardButton(
-                                "X", callback_data="cancel_btn"
+                                "X", callback_data="back_match"
                             ),
                         ],
                     ]
