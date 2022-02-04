@@ -389,6 +389,11 @@ def info(update: Update, context: CallbackContext):
                                 "Disaster", url="https://t.me/Rem_updates/12"
                             ),
                         ],
+                        [
+                            InlineKeyboardButton(
+                                "X", callback_data="cancel_btn"
+                            ),
+                        ],
                     ]
                 ),
                 parse_mode=ParseMode.HTML,
