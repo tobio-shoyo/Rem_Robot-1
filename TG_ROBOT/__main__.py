@@ -636,6 +636,7 @@ def settings_button(update: Update, context: CallbackContext):
 
         # ensure no spinny white circle
         bot.answer_callback_query(query.id)
+        
         query.message.delete()
     except BadRequest as excp:
         if excp.message not in [
