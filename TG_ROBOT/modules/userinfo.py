@@ -347,42 +347,7 @@ def info(update: Update, context: CallbackContext):
          text += "\n\nCo-Owner Of The Bot."
          disaster_level_present = True
 
-    if disaster_level_present:
-        text += ' [<a href="Rem bot access levels we call as "Disaster Levels"
 
-• Half Elf's 
-
-Developers who can access the bots server and can execute, modify bot code. Can also manage other Disasters
-
-
-• Divine Dragon
-
-Only one exists, bot owner. 
-Divine dragon has complete bot access, including bot admin-ship in chats Rem is at.
-
-
-• Oni
-
-Also called as Sudos super user access, can gban, manage disasters lower than them and are admins in Rem.
-
-
-• Reincarnated Human
-
-Also known as Support users, reincarnated humans have access to globally ban users across Rem.
-
-
-• Wild Beasts
-
-Wild beasts are fully immune to mute, ban, kicks etc.
-
-
-
-Disclaimer: 
-
-The disaster levels in Rem are there for troubleshooting, support, banning potential scammers.
-Report abuse or ask us more on these at @Rem_Support.">?</a>]'.format(
-            bot.username,
-        )
 
     try:
         user_member = chat.get_member(user.id)
@@ -408,6 +373,7 @@ buttons = [
 
     [
         InlineKeyboardButton(text="HEALTH",url=f"https://t.me/Rem_updates/31"),
+        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
     ],
 ]
 
