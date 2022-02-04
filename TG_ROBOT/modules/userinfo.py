@@ -375,7 +375,7 @@ def info(update: Update, context: CallbackContext):
         InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
         InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
         ])
-    msg.reply_text(
+    message.reply_text(
         msg,
         reply_markup=keyboard,
         parse_mode=ParseMode.HTML,
