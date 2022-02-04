@@ -282,7 +282,7 @@ def info(update: Update, context: CallbackContext):
 
     rep = message.reply_text("<code>Appraising...</code>", parse_mode=ParseMode.HTML)
 
-    text = (
+    msg = text = (
         f"╒═══「<b> INFORMATION:</b> 」\n"
         f"┣|• ID: <code>{user.id}</code>\n"
         f"┣|• First Name: {html.escape(user.first_name)}"
@@ -375,9 +375,8 @@ def info(update: Update, context: CallbackContext):
         InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
         InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
         ])
-    message.reply_text(
-        rep,
-        text,
+    msg.reply_text(
+        msg,
         reply_markup=keyboard,
         parse_mode=ParseMode.HTML,
     )  
