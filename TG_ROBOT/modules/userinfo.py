@@ -5,7 +5,7 @@ Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 T-O-B-I-I
 Copyright (c) 2021, AOGIRI, <https://github.com/T-O-B-I-I/Rem_Robot>
 
-This file is part of @TG_ROBOT (Telegram Bot)
+This file is part of @RemCutebot (Telegram Bot)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,7 @@ from telegram.ext import CallbackContext, CommandHandler
 from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
 from telegram.utils.helpers import escape_markdown, mention_html
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
     
 from TG_ROBOT import (
     DEV_USERS,
