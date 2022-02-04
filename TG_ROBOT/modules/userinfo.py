@@ -370,25 +370,55 @@ def info(update: Update, context: CallbackContext):
         if mod_info:
             text += "\n\n" + mod_info
 
-   
     if INFOPIC:
         try:
+            username = update.effective_user.username
             profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
             context.bot.sendChatAction(chat.id, "upload_photo")
             context.bot.send_photo(
-            chat.id,
-            photo=profile,
-            caption=(text),
-            parse_mode=ParseMode.HTML,            
-        )
+                chat.id,
+                photo=profile,
+                caption=(text),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                "Health", url="https://t.me/Rem_updates/30"
+                            ),
+                            InlineKeyboardButton(
+                                "Disaster", url="https://t.me/Rem_updates/12"
+                            ),
+                        ],
+                    ]
+                ),
+                parse_mode=ParseMode.HTML,
+            )
+
         # Incase user don't have profile pic, send normal text
         except IndexError:
             message.reply_text(
-                text, parse_mode=ParseMode.HTML)
+                text,
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                "Health", url="https://t.me/Rem_updates/30"
+                            ),
+                            InlineKeyboardButton(
+                                "Disaster", url="https://t.me/Rem_updates/12"
+                            ),
+                        ],
+                    ]
+                ),
+                parse_mode=ParseMode.HTML,
+                disable_web_page_preview=True,
+            )
 
     else:
         message.reply_text(
-            text, parse_mode=ParseMode.HTML)
+            text,
+            parse_mode=ParseMode.HTML,
+        )
 
     rep.delete()
     
