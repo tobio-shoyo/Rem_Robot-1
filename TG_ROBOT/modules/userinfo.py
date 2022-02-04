@@ -392,13 +392,7 @@ def info(update: Update, context: CallbackContext):
 
     rep.delete()
     
-    buttons = [
-
-    [
-        InlineKeyboardButton(text="HEALTH",url=f"https://t.me/Rem_updates/31"),
-        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
-    ],
-]
+    
 
 
 def about_me(update: Update, context: CallbackContext):
@@ -455,6 +449,13 @@ def set_about_me(update: Update, context: CallbackContext):
                     len(info[1]),
                 ),
             )
+buttons = [
+
+    [
+        InlineKeyboardButton(text="HEALTH",url=f"https://t.me/Rem_updates/31"),
+        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
+    ],
+    ]
 
 @sudo_plus
 def stats(update, context):
