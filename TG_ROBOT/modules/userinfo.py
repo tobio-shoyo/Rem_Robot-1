@@ -369,13 +369,7 @@ def info(update: Update, context: CallbackContext):
             mod_info = mod.__user_info__(user.id, chat.id).strip()
         if mod_info:
             text += "\n\n" + mod_info
-buttons = [
 
-    [
-        InlineKeyboardButton(text="HEALTH",url=f"https://t.me/Rem_updates/31"),
-        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
-    ],
-]
 
     if INFOPIC:
         try:
@@ -397,6 +391,15 @@ buttons = [
             text, parse_mode=ParseMode.HTML)
 
     rep.delete()
+    
+    buttons = [
+
+    [
+        InlineKeyboardButton(text="HEALTH",url=f"https://t.me/Rem_updates/31"),
+        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
+    ],
+]
+
 
 def about_me(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
