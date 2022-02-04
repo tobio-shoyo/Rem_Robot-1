@@ -370,16 +370,7 @@ def info(update: Update, context: CallbackContext):
         if mod_info:
             text += "\n\n" + mod_info
 
-    keyboard = InlineKeyboardMarkup
-    ([
-        InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
-        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
-        ])
-    message.reply_text(
-        msg,
-        reply_markup=keyboard,
-        parse_mode=ParseMode.HTML,
-    )  
+   
 
 
     if INFOPIC:
