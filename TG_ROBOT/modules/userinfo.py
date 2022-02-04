@@ -370,6 +370,17 @@ def info(update: Update, context: CallbackContext):
         if mod_info:
             text += "\n\n" + mod_info
 
+    keyboard = InlineKeyboardMarkup
+    ([
+        InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
+        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
+        ])
+    message.reply_text(
+        text,
+        reply_markup=keyboard,
+        parse_mode=ParseMode.HTML,
+    )  
+
 
     if INFOPIC:
         try:
@@ -449,13 +460,6 @@ def set_about_me(update: Update, context: CallbackContext):
                     len(info[1]),
                 ),
             )
-buttons = [
-
-    [
-        InlineKeyboardButton(text="HEALTH",url=f"https://t.me/Rem_updates/31"),
-        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
-    ],
-    ]
 
 @sudo_plus
 def stats(update, context):
@@ -627,7 +631,7 @@ When marked as AFK, any mentions will be replied to with a message stating that 
   - brb <reason>: Same as the afk command, but not a command.\n 
   
 *What is that health thingy?*
- Come and see [HP System explained](https://t.me/Black_Knights_Union/33)
+ Come and see [HP System explained](https://t.me/Rem_updates/30)
 """
 
 SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio, run_async=True)
