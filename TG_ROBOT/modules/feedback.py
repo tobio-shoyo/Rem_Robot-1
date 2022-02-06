@@ -3,8 +3,8 @@ import random
 from telegram import ParseMode
 from telethon import Button
 
-from ZeusXRobot import OWNER_ID, SUPPORT_CHAT
-from ZeusXRobot import telethn as tbot
+from TG_ROBOT import OWNER_ID, SUPPORT_CHAT
+from TG_ROBOT import telethn as tbot
 
 from ..events import register
 
@@ -16,11 +16,11 @@ async def feedback(e):
     user_name = e.sender.first_name
     mention = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
     Doraemon = (
-        "https://telegra.ph/file/74a0524a3effdcd95bc2f.jpg",
-        "https://telegra.ph/file/428fad92dd055364b5e3c.jpg",
-        "https://telegra.ph/file/2dd04f407b16bc2cfdf76.jpg",
-        "https://telegra.ph/file/affec1dd47c32c6968c7f.jpg",
-        "https://telegra.ph/file/42b9c60d1ac6bd113d963.jpg",
+        "https://telegra.ph/file/951b192d0b86aea2f0000.jpg",
+        "https://telegra.ph/file/5cf8e89f0d3b49a3c15fb.jpg",
+        "https://telegra.ph/file/960685f142f1c0d87bde7.jpg",
+        "",
+        "",
     )
     NATFEED = ("https://telegra.ph/file/2dd04f407b16bc2cfdf76.jpg",)
     BUTTON = [[Button.url("View Feedback ✨", f"https://t.me/{SUPPORT_CHAT}")]]
