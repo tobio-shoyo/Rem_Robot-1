@@ -1,31 +1,3 @@
-"""
-MIT License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
-
-This file is part of @TG_ROBOT (Telegram Bot)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
-
 import html
 import json
 import os
@@ -457,7 +429,7 @@ def removetiger(update: Update, context: CallbackContext) -> str:
 
 @whitelist_plus
 def whitelistlist(update: Update, context: CallbackContext):
-    reply = "<b>Known Wolves♠️:</b>\n"
+    reply = "<b>|𝙻𝙸𝚂𝚃 𝙵𝙾𝚁 WILD BEASTS|:</b>\n"
     m = update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
@@ -476,7 +448,7 @@ def whitelistlist(update: Update, context: CallbackContext):
 
 @whitelist_plus
 def tigerlist(update: Update, context: CallbackContext):
-    reply = "<b>Known Tigers🔰:</b>\n"
+    reply = "<b>|𝙻𝙸𝚂𝚃 𝙵𝙾𝚁 WILD BEASTS|:</b>\n"
     m = update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
@@ -497,7 +469,7 @@ def supportlist(update: Update, context: CallbackContext):
     m = update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
-    reply = "<b>Known Demons⭐:</b>\n"
+    reply = "<b>|𝙻𝙸𝚂𝚃 𝙵𝙾𝚁 REINCARNATED HUMAN|:</b>\n"
     for each_user in DEMONS:
         user_id = int(each_user)
         try:
@@ -515,7 +487,7 @@ def sudolist(update: Update, context: CallbackContext):
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
     true_sudo = list(set(DRAGONS) - set(DEV_USERS))
-    reply = "<b>Known Dragons💥:</b>\n"
+    reply = "<b>|𝙻𝙸𝚂𝚃 𝙵𝙾𝚁 DIVINE DRAGON|:</b>\n"
     for each_user in true_sudo:
         user_id = int(each_user)
         try:
@@ -533,7 +505,7 @@ def devlist(update: Update, context: CallbackContext):
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
     true_dev = list(set(DEV_USERS) - {OWNER_ID})
-    reply = "<b>Black Knights Union Members⚡️:</b>\n"
+    reply = "<b>|𝙻𝙸𝚂𝚃 𝙵𝙾𝚁 𝚁𝙴𝚃𝙰𝚁𝙳𝙴𝙳 𝙳𝙴𝚅𝚂|:</b>\n"
     for each_user in true_dev:
         user_id = int(each_user)
         try:
@@ -544,19 +516,19 @@ def devlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-SUDO_HANDLER = CommandHandler(("addsudo", "addtitanshifter"), addsudo, run_async=True)
-SUPPORT_HANDLER = CommandHandler(("addsupport", "addroyalblood"), addsupport, run_async=True)
+SUDO_HANDLER = CommandHandler(("addsudo", "adddragon"), addsudo, run_async=True)
+SUPPORT_HANDLER = CommandHandler(("addsupport", "adddemon"), addsupport, run_async=True)
 TIGER_HANDLER = CommandHandler(("addscout"), addtiger)
 WHITELIST_HANDLER = CommandHandler(("addgarrison", "addwhitelist"), addwhitelist, run_async=True)
 UNSUDO_HANDLER = CommandHandler(("removesudo", "removetitanshifter"), removesudo, run_async=True)
-UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removeroyalblood"), removesupport, run_async=True)
+UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removedemon"), removesupport, run_async=True)
 UNTIGER_HANDLER = CommandHandler(("removescout"), removetiger)
 UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removegarrison"), removewhitelist, run_async=True)
 WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "garrisons"], whitelistlist, run_async=True)
 TIGERLIST_HANDLER = CommandHandler(["scouts"], tigerlist, run_async=True)
 SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "royalbloods"], supportlist, run_async=True)
 SUDOLIST_HANDLER = CommandHandler(["sudolist", "titanshifters"], sudolist, run_async=True)
-DEVLIST_HANDLER = CommandHandler(["devlist", "ackermans"], devlist, run_async=True)
+DEVLIST_HANDLER = CommandHandler(["devlist", "retards", "devs"], devlist, run_async=True)
 
 
 dispatcher.add_handler(SUDO_HANDLER)
