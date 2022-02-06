@@ -10,13 +10,13 @@ from pyrogram.types import (
     Message,
 )
 
-from SiestaRobot import pbot as Client
-from SiestaRobot import (
+from TG_ROBOT import pbot as Client
+from TG_ROBOT import (
     OWNER_ID as owner_id,
     OWNER_USERNAME as owner_usn,
     SUPPORT_CHAT as log,
 )
-from SiestaRobot.utils.errors import capture_err
+from TG_ROBOT.utils.errors import capture_err
 
 
 def content(msg: Message) -> [None, str]:
@@ -49,7 +49,7 @@ async def bug(_, msg: Message):
     datetimes_fmt = "%d-%m-%Y"
     datetimes = datetime.utcnow().strftime(datetimes_fmt)
 
-    thumb = "https://telegra.ph/file/a2ff6d8130ce72868eda6.jpg"
+    thumb = "https://telegra.ph/file/960685f142f1c0d87bde7.jpg"
 
     bug_report = f"""
 **#BUG : ** **@{owner_usn}**
