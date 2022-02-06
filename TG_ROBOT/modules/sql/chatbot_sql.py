@@ -33,7 +33,7 @@ from TG_ROBOT.modules.sql import BASE, SESSION
 from sqlalchemy import (
     Column,
     ForeignKey,
-    Integer,
+    BitInteger,
     String,
     UnicodeText,
     UniqueConstraint,
@@ -43,7 +43,7 @@ from sqlalchemy import (
 
 class Users(BASE):
     __tablename__ = "users"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BitInteger, primary_key=True)
     username = Column(UnicodeText)
 
     def __init__(self, user_id, username=None):
@@ -69,7 +69,7 @@ class Chats(BASE):
 
 class ChatMembers(BASE):
     __tablename__ = "chat_members"
-    priv_chat_id = Column(Integer, primary_key=True)
+    priv_chat_id = Column(BitInteger, primary_key=True)
     # NOTE: Use dual primary key instead of private primary key?
     chat = Column(
         String(14),
@@ -77,7 +77,7 @@ class ChatMembers(BASE):
         nullable=False,
     )
     user = Column(
-        Integer,
+        BitInteger,
         ForeignKey("users.user_id", onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False,
     )
