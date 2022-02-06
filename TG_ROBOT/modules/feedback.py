@@ -15,15 +15,15 @@ async def feedback(e):
     user_id = e.sender.id
     user_name = e.sender.first_name
     mention = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-    Doraemon = (
+    TG_ROBOT = (
         "https://telegra.ph/file/951b192d0b86aea2f0000.jpg",
         "https://telegra.ph/file/5cf8e89f0d3b49a3c15fb.jpg",
         "https://telegra.ph/file/960685f142f1c0d87bde7.jpg",
-        "",
-        "",
+        "https://telegra.ph/file/0fce774c57609b0b15a36.jpg",
+        "https://telegra.ph/file/960685f142f1c0d87bde7.jpg",
     )
-    NATFEED = ("https://telegra.ph/file/2dd04f407b16bc2cfdf76.jpg",)
-    BUTTON = [[Button.url("View Feedback ✨", f"https://t.me/{SUPPORT_CHAT}")]]
+    NATFEED = ("https://telegra.ph/file/951b192d0b86aea2f0000.jpg",)
+    BUTTON = [[Button.url("View Feedback ✨", f"https://t.me/Rem_Support")]]
     TEXT = "Thanks For Your Feedback, I Hope You Happy With Our Service"
     GIVE = "Give Some Text For Feedback ✨"
     logger_text = f"""
