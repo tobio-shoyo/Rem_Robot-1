@@ -15,7 +15,7 @@ async def feedback(e):
     user_id = e.sender.id
     user_name = e.sender.first_name
     mention = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-    TG_ROBOT = (
+    VEGETA = (
         "https://telegra.ph/file/951b192d0b86aea2f0000.jpg",
         "https://telegra.ph/file/5cf8e89f0d3b49a3c15fb.jpg",
         "https://telegra.ph/file/960685f142f1c0d87bde7.jpg",
