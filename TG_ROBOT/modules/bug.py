@@ -37,9 +37,9 @@ def content(msg: Message) -> [None, str]:
 @capture_err
 async def bug(_, msg: Message):
     if msg.chat.username:
-        chat_username = f"@{msg.chat.username} / `{msg.chat.id}`"
+        chat_username = f"@Rem_Support / `{-1001605615783}`"
     else:
-        chat_username = f"Private Group / `{msg.chat.id}`"
+        chat_username = f"@Rem_Support / `{msg.chat.id}`"
 
     bugs = content(msg)
     user_id = msg.from_user.id
