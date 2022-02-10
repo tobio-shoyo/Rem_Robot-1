@@ -250,7 +250,7 @@ async def profanity(event):
         return
 
 
-@tbot.on(events.NewMessage(pattern=None))
+@ubot.on(events.NewMessage(pattern=None))
 async def del_profanity(event):
     if event.is_private:
         return
@@ -343,7 +343,7 @@ async def del_profanity(event):
 #
 
 __help__ = """
-➛ Cutiepii can protect your group from NSFW senders, Slag word users and also can force members to use English
+➛ Rem can protect your group from NSFW senders, Slag word users and also can force members to use English
 
 *Commmands*:
   ➢ `/gshield <on/off>`*:* Enable|Disable Porn cleaning
