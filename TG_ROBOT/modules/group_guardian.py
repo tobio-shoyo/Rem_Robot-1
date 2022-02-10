@@ -25,6 +25,7 @@ from TG_ROBOT import telethn, MONGO_DB_URL
 translator = google_translator()
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 
+
 client = MongoClient()
 client = MongoClient(MONGO_DB_URL)
 db = client["Cutiepii"]
