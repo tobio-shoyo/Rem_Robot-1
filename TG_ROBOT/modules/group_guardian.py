@@ -20,7 +20,7 @@ from TG_ROBOT.modules.sql.nsfw_watch_sql import (
     is_nsfwatch_indb,
     rmnsfwatch,
 )
-from TG_ROBOT import telethn, MONGO_DB_URL
+from TG_ROBOT import telethn, MONGO_DB_URL, Pbot
 
 translator = google_translator()
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
@@ -250,7 +250,7 @@ async def profanity(event):
         return
 
 
-@ubot.on(events.NewMessage(pattern=None))
+@Pbot.on(events.NewMessage(pattern=None))
 async def del_profanity(event):
     if event.is_private:
         return
