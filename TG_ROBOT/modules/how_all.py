@@ -9,78 +9,57 @@ from telethon import Button, events
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.utils.helpers import escape_markdown
 
-NUM1 = (
-    "6cm",
-    "9cm",
-    "15cm",
-    "16cm",
-    "20cm",
-    "22cm",
-    "24cm",
-    "25cm",
+NUM = (
+    6,
+    9,
+    15,
+    16,
+    20,
+    22,
+    24,
+    25,
 )
 
-NUM2 = (
-    "6%",
-    "9%",
-    "15%",
-    "16%",
-    "20%",
-    "22%",
-    "24%",
-    "25%",
-)
-
-NUM3 = (
-    "6",
-    "9",
-    "15",
-    "16",
-    "20",
-    "22",
-    "24",
-    "25",
-)
 
 MEDIA = "https://telegra.ph/file/d55e9149fd684bbe62aa6.mp4"
 
 def cock(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
-    NUMBERS = random.choice(NUM1)
-    msg.reply_text("🍆 {} 's cock size is {}".format(
+    NUMBERS = random.choice(NUM)
+    msg.reply_text("🍆 {} 's cock size is {}CM.".format(
         first_name, NUMBERS
     )) 
 
 def cute(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
-    NUMBERS = random.choice(NUM2)
-    msg.reply_text("🍑 {} is {} Cute!".format(
+    NUMBERS = random.choice(NUM)
+    msg.reply_text("🍑 {} is {}% Cute!".format(
         first_name, NUMBERS
     )) 
 
 def boobs(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
-    NUMBERS = random.choice(NUM3)
-    msg.reply_text("🍒 {} BooBs size is {}!".format(
+    NUMBERS = random.choice(NUM)
+    msg.reply_text("🍒 {} BooBs is {}!".format(
         first_name, NUMBERS
     )) 
 
-def lezbian(update: Update, context: CallbackContext):
+def lesbian(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
-    NUMBERS = random.choice(NUM2)
-    msg.reply_text("💜 {} is {} lezbian!".format(
+    NUMBERS = random.choice(NUM)
+    msg.reply_text("💜 {} is {}% lezbian!".format(
         first_name, NUMBERS
     )) 
 
 def horny(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
-    NUMBERS = random.choice(NUM2)
-    msg.reply_text("🔥 {} is {} horny!".format(
+    NUMBERS = random.choice(NUM)
+    msg.reply_text("🔥 {} is {}% horny!".format(
         first_name, NUMBERS
     ))     
 
@@ -89,7 +68,7 @@ COCK_HANDLER = DisableAbleCommandHandler("cock", cock, run_async=True)
 CUTE_HANDLER = DisableAbleCommandHandler("cute", cute, run_async=True)
 BOOBS_HANDLER = DisableAbleCommandHandler("boobs", boobs, run_async=True)
 HORNY_HANDLER = DisableAbleCommandHandler("horny", horny, run_async=True)
-LESBIAN_HANDLER = DisableAbleCommandHandler("lesbian", "lezbian", lezbian, run_async=True)
+LESBIAN_HANDLER = DisableAbleCommandHandler("lezbian", "lesbian", lesbian, run_async=True)
 
 dispatcher.add_handler(COCK_HANDLER)
 dispatcher.add_handler(CUTE_HANDLER)
