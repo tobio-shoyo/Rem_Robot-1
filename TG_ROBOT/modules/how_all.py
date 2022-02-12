@@ -15,13 +15,13 @@ NUM1 = (
     "16",
 )
 
-
 def cock(update: Update, context: CallbackContext):
     args = context.args
     first_name = update.effective_user.first_name
-    update.effective_message.reply_text({first_name})(" your dick size is "(random.choice(NUM1))),
-
-
+    update.effective_message.reply_text(
+                f"{html.escape(first_name)}'s dick size is " (random.choice(NUM1)),
+                parse_mode=ParseMode.HTML,
+            )
 
 
 COCK_HANDLER = DisableAbleCommandHandler("cock", cock, run_async=True)
