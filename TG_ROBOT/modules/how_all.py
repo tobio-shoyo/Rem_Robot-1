@@ -64,11 +64,11 @@ def boobs(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
     NUMBERS = random.choice(NUM3)
-    msg.reply_text("🍒 {} BooBs is {}!".format(
+    msg.reply_text("🍒 {} BooBs size is {}!".format(
         first_name, NUMBERS
     )) 
 
-def lesbian(update: Update, context: CallbackContext):
+def lezbian(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
     NUMBERS = random.choice(NUM2)
@@ -89,7 +89,7 @@ COCK_HANDLER = DisableAbleCommandHandler("cock", cock, run_async=True)
 CUTE_HANDLER = DisableAbleCommandHandler("cute", cute, run_async=True)
 BOOBS_HANDLER = DisableAbleCommandHandler("boobs", boobs, run_async=True)
 HORNY_HANDLER = DisableAbleCommandHandler("horny", horny, run_async=True)
-LESBIAN_HANDLER = DisableAbleCommandHandler("lesbian", lesbian, run_async=True)
+LESBIAN_HANDLER = DisableAbleCommandHandler("lesbian", "lezbian", lezbian, run_async=True)
 
 dispatcher.add_handler(COCK_HANDLER)
 dispatcher.add_handler(CUTE_HANDLER)
