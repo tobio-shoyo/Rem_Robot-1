@@ -20,11 +20,13 @@ NUM1 = (
     "25cm",
 )
 
+MEDIA = "https://telegra.ph/file/d55e9149fd684bbe62aa6.mp4"
+
 def cock(update: Update, context: CallbackContext):
     msg = update.effective_message
     first_name = update.effective_user.first_name
     NUMBERS = random.choice(NUM1)
-    msg.reply_text("{} 's cock size is {}".format(
+    msg.reply_video[MEDIA]("{} 's cock size is {}".format(
         first_name, NUMBERS
     )) 
 
