@@ -10,10 +10,14 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Upda
 from telegram.utils.helpers import escape_markdown
 
 NUM1 = (
-    6,
-    9,
-    15,
-    16,
+    "6cm",
+    "9cm",
+    "15cm",
+    "16cm",
+    "20cm",
+    "22cm",
+    "24cm",
+    "25cm",
 )
 
 def cock(update: Update, context: CallbackContext):
