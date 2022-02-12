@@ -17,8 +17,9 @@ NUM1 = (
 
 def cock(update: Update, context: CallbackContext):
     args = context.args
+    msg = update.effective_message
     first_name = update.effective_user.first_name
-    update.effective_message.reply_text(
+    msg.reply_text(
                 f"{html.escape(first_name)}'s dick size is " (random.choice(NUM1)),
                 parse_mode=ParseMode.HTML,
             )
