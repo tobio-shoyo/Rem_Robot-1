@@ -15,6 +15,7 @@ NUM1 = (
     "16",
 )
 
+
 def cock(update: Update, context: CallbackContext):
     args = context.args
     first_name = update.effective_user.first_name
