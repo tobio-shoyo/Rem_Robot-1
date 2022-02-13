@@ -20,7 +20,7 @@ mycursor = db.cursor(buffered=True)
 
 
 logger = logging.getLogger(__name__)
-updater = Updater('5275308569:AAGxW6SikyZUlTWRgeI2CQqVyeseSwi2Lfc', use_context=True)
+updater = Updater('2135830536:AAGPB1mQLV7kW4uDcBHLFfspB5JtT93ZE5c', use_context=True)
 
 
 def error(update, context):
