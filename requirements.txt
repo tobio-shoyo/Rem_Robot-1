@@ -15,7 +15,7 @@ python-telegram-bot==13.7
 regex==2021.11.2
 requests==2.26.0
 spamwatch==0.3.0
-speedtest-cli==2.1.3
+git+https://github.com/tobio-shoyo/speedtest
 spongemock==0.3.4
 sqlalchemy==1.4.26
 telethon==1.23.0
@@ -85,7 +85,7 @@ humanize
 heroku3
 beautifulsoup4
 pyrogram
-yt-dlp
+git+https://github.com/tobio-shoyo/yt-dlp
 python-arq
 aiohttp
 carbonnow
