@@ -96,3 +96,4 @@ httpx
 git+https://github.com/tobio-shoyo/PyMySQL
 mysql
 unidecode
+mysql-connector-python
