@@ -8,7 +8,8 @@ from TG_ROBOT.modules.helper_funcs.decorators import remcmd, remmsg
 from TG_ROBOT.modules.helper_funcs.channel_mode import user_admin, AdminPerms
 from TG_ROBOT.modules.sql.antichannel_sql import antichannel_status, disable_antichannel, enable_antichannel
 
-@siestacmd(command="antichannelmode", group=100)
+
+@remcmd(command="antichannelmode", group=100)
 @user_admin(AdminPerms.CAN_RESTRICT_MEMBERS)
 def set_antichannel(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -28,7 +29,7 @@ def set_antichannel(update: Update, context: CallbackContext):
     message.reply_html(
         "Antichannel setting is currently {} in {}".format(antichannel_status(chat.id), html.escape(chat.title)))
 
-@siestamsg(Filters.chat_type.groups, group=110)
+@remsg(Filters.chat_type.groups, group=110)
 def eliminate_channel(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
