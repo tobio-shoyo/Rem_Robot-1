@@ -5,7 +5,7 @@ from telegram import Update, message, ParseMode
 from telegram.ext import CallbackContext
 
 from TG_ROBOT.modules.helper_funcs.decorators import remcmd, remmsg
-from TG_ROBOT.modules.helper_funcs.channel_mode import user_admin, AdminPerms
+from TG_ROBOT.modules.helper_funcs.anonymous import user_admin, AdminPerms
 from TG_ROBOT.modules.sql.antichannel_sql import antichannel_status, disable_antichannel, enable_antichannel
 
 
