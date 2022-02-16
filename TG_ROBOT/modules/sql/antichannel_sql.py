@@ -4,6 +4,7 @@ from sqlalchemy import Boolean
 from sqlalchemy.sql.sqltypes import String
 from sqlalchemy import Column
 
+
 from TG_ROBOT.modules.sql import BASE, SESSION
 
 
