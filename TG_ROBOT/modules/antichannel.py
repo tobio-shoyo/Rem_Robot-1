@@ -29,7 +29,7 @@ def set_antichannel(update: Update, context: CallbackContext):
     message.reply_html(
         "Antichannel setting is currently {} in {}".format(antichannel_status(chat.id), html.escape(chat.title)))
 
-@remsg(Filters.chat_type.groups, group=110)
+@re,msg(Filters.chat_type.groups, group=110)
 def eliminate_channel(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
