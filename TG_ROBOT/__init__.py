@@ -129,6 +129,7 @@ if ENV:
     GROUP_START_IMG = os.environ.get("GROUP_START_IMG", True)
     REM_PHOTO = os.environ.get("REM_PHOTO", True)
     SUDO_USERS = DRAGONS 
+    MONGO_DB_URI = MONGO_DB_URL
     
     try:
         BL_CHATS = set(int(x) for x in os.environ.get("BL_CHATS", "").split())
