@@ -13,7 +13,7 @@
 
 import logging, os, random, nekos, requests, json, html, traceback, sys
 
-import strings as s
+from TG_ROBOT.modules import strings as s
 
 from telegram.ext import Updater, CommandHandler, run_async, Filters, Defaults
 
