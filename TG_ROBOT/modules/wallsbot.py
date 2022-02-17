@@ -13,7 +13,7 @@
 
 import logging, os, random, nekos, requests, json, html, traceback, sys
 
-from TG_ROBOT.modules import strings as s
+import strings as s
 
 from telegram.ext import Updater, CommandHandler, run_async, Filters, Defaults
 
@@ -26,19 +26,18 @@ from threading import Thread
 from functools import wraps
 
 
-from TG_ROBOT import dispatcher , TOKEN, LOGGER, PORT
-
 # enable logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
-ENV = bool(os.environ.get("ENV", False))
+LOGGER = logging.getLogger(__name__)
 
+TOKEN = "2135830536:AAGPB1mQLV7kW4uDcBHLFfspB5JtT93ZE5c"
+PORT = 5000
 WEBHOOK = False
-URL = "https://pixabay.com/api/"
-PIX_API = "24446951-f5131704e39ee7908be3a51e4"    
-
+URL = "https://waalp.herokuapp.com/"
+PIX_API = "24446951-f5131704e39ee7908be3a51e4" 
 # Log Errors caused by Updates
 
 
@@ -60,13 +59,10 @@ def error(update, context):
         "An exception was raised while handling an update\n"
         "<pre>update = {}</pre>\n\n"
         "<pre>{}</pre>"
-    ).format(
-        html.escape(json.dumps(update.to_dict(), indent=2, ensure_ascii=False)),
-        html.escape(tb),
     )
 
     # Finally, send the message
-    context.bot.send_message(chat_id=894380120, text=message)
+    context.bot.send_message(chat_id=1007196749, text=message)
 
 
 # Helper funcs ==============================================================================
@@ -138,7 +134,6 @@ def build_res(hits):
         authid = hits.get("user_id")
         tags = hits.get("tags")
         imgurl = hits.get("pageURL")
-        document = hits.get("imageURL")
 
     return res
 
@@ -162,7 +157,6 @@ def send(update, context, res):
             timeout=60,
         )
 
-        context.bot.send_document(chat.id, document=res.document, timeout=100)
     except BadRequest as excp:
         msg.reply_text(f"Error! {excp.message}")
 
@@ -239,6 +233,18 @@ def animewall(update, context):
 
 @run_async
 @send_action(typing)
+def start(update, context):
+    update.effective_message.reply_text(s.START_MSG.format(context.bot.first_name))
+
+
+@run_async
+@send_action(typing)
+def helper(update, context):
+    update.effective_message.reply_text(s.HELP_MSG, parse_mode=None)
+
+
+@run_async
+@send_action(typing)
 def colors(update, context):
     update.effective_message.reply_text(
         s.COLOR_STR.format(
@@ -286,6 +292,7 @@ def api_status(update, context):
 def main():
     defaults = Defaults(parse_mode=ParseMode.HTML)
     updater = Updater(TOKEN, use_context=True, defaults=defaults)
+    dispatcher = updater.dispatcher
 
     def stop_and_restart():
         updater.stop()
