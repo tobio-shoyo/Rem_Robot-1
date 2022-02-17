@@ -14,6 +14,7 @@
 import logging, os, random, nekos, requests, json, html, traceback, sys
 
 from TG_ROBOT.modules import strings as s
+from TG_ROBOT import dispatcher
 
 from telegram.ext import Updater, CommandHandler, run_async, Filters, Defaults
 
@@ -292,7 +293,6 @@ def api_status(update, context):
 def main():
     defaults = Defaults(parse_mode=ParseMode.HTML)
     updater = Updater(TOKEN, use_context=True, defaults=defaults)
-    dispatcher = updater.dispatcher
 
     def stop_and_restart():
         updater.stop()
