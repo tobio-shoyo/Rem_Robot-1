@@ -497,7 +497,6 @@ def stats(update: Update, context: CallbackContext):
 
     try:
         update.effective_message.reply_text(
-            MEDIA,
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
