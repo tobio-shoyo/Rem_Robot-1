@@ -71,6 +71,8 @@ from TG_ROBOT.modules.helper_funcs.chat_status import sudo_plus
 from TG_ROBOT.modules.helper_funcs.extraction import extract_user
 from TG_ROBOT import telethn
 
+MEDIA = "https://telegra.ph/file/18003d496d603690fa2c6.jpg"
+
 def no_by_per(totalhp, percentage):
     """
     rtype: num of `percentage` from total
@@ -282,7 +284,7 @@ def info(update: Update, context: CallbackContext):
 
     rep = message.reply_text("<code>Appraising...</code>", parse_mode=ParseMode.HTML)
 
-    text = (
+    msg = text = (
         f"╒═══「<b> INFORMATION:</b> 」\n"
         f"┣|• ID: <code>{user.id}</code>\n"
         f"┣|• First Name: {html.escape(user.first_name)}"
@@ -343,7 +345,7 @@ def info(update: Update, context: CallbackContext):
     elif user.id in WOLVES:
         text += "\n\nThis is the Wild beasts (Wolfs). \n "
         disaster_level_present = True
-    elif user.id == 2093358471:
+    elif user.id == 2142457633:
          text += "\n\nCo-Owner Of The Bot."
          disaster_level_present = True
 
@@ -370,60 +372,40 @@ def info(update: Update, context: CallbackContext):
         if mod_info:
             text += "\n\n" + mod_info
 
+    keyboard = InlineKeyboardMarkup
+    ([
+        InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
+        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
+        ],
+      [
+
+      ]  
+    )
+    message.reply_text(
+        msg,
+        reply_markup=keyboard,
+        parse_mode=ParseMode.HTML,
+    )  
+
+
     if INFOPIC:
         try:
-            username = update.effective_user.username
             profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
             context.bot.sendChatAction(chat.id, "upload_photo")
             context.bot.send_photo(
-                chat.id,
-                photo=profile,
-                caption=(text),
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                "Health", url="https://t.me/Rem_updates/30"
-                            ),
-                            InlineKeyboardButton(
-                                "Disaster", url="https://t.me/Rem_updates/12"
-                            ),
-                        ],
-                        [
-                            InlineKeyboardButton(
-                                "X", callback_data="REM_back"
-                            ),
-                        ],
-                    ]
-                ),
-                parse_mode=ParseMode.HTML,
-            )
-
+            chat.id,
+            photo=profile,
+            caption=(text),
+            parse_mode=ParseMode.HTML,            
+        )
         # Incase user don't have profile pic, send normal text
         except IndexError:
             message.reply_text(
-                text,
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                "Health", url="https://t.me/Rem_updates/30"
-                            ),
-                            InlineKeyboardButton(
-                                "Disaster", url="https://t.me/Rem_updates/12"
-                            ),
-                        ],
-                    ]
-                ),
-                parse_mode=ParseMode.HTML,
-                disable_web_page_preview=True,
-            )
+                text, parse_mode=ParseMode.HTML)
 
     else:
         message.reply_text(
-            text,
-            parse_mode=ParseMode.HTML,
-        )
+            text, parse_mode=ParseMode.HTML)
 
     rep.delete()
     
@@ -486,7 +468,8 @@ def set_about_me(update: Update, context: CallbackContext):
             )
 
 @sudo_plus
-def stats(update, context):
+def stats(update: Update, context: CallbackContext):
+    update.effective_message.reply_photo(MEDIA)
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     botuptime = get_readable_time((time.time() - StartTime))
     status = "*╒═══「 System statistics 」*\n\n"
@@ -523,9 +506,9 @@ def stats(update, context):
                         "\n*Bot statistics*:\n"
                         + "\n".join(mod.__stats__() for mod in STATS)
                     )
-                    + f"\n\n✦ [Support](https://t.me/{SUPPORT_CHAT}) | ✦ [Updates](https://t.me/Rem_updates)\n\n"
+                    + f"\n\n✦ [Support](https://t.me/{SUPPORT_CHAT}) | ✦ [Updates](https://t.me/Black_Knights_Union)\n\n"
                 )
-                + "╘══「 by [ANKUSH](https://github.com/T-O-B-I-I) 」\n"
+                + "╘══「 by [Ankush](https://github.com/T-O-B-I-I) 」\n"
             ),
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
