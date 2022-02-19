@@ -489,7 +489,7 @@ def stats(update: Update, context: CallbackContext):
     img = MEDIA
     button = ([
         [
-        InlineKeyboardButton(text="Your Info", callback_data=""),
+        InlineKeyboardButton(text="Your Info", callback_data="help_back"),
         ],
     ])
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
