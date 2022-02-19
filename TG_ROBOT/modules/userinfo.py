@@ -392,7 +392,7 @@ def info(update: Update, context: CallbackContext):
                             InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
                         ],
                          [
-                            InlineKeyboardButton( text="❌", callback_data="help_back"),
+                            InlineKeyboardButton( text="❌", callback_data="REM_back"),
                          ]
                     ]
                 ),
@@ -528,7 +528,8 @@ def stats(update: Update, context: CallbackContext):
             (
                 (
                     (
-                        "\n*Bot statistics*:\n"
+                        status
+                        +"\n*Bot statistics*:\n"
                         + "\n".join(mod.__stats__() for mod in STATS)
                     )
                     + f"\n\n✦ [Support](https://t.me/{SUPPORT_CHAT}) | ✦ [Updates](https://t.me/Black_Knights_Union)\n\n"
@@ -537,6 +538,7 @@ def stats(update: Update, context: CallbackContext):
             ),
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
+            reply_markup=button,
         )
         
         
