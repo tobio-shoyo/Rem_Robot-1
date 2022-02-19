@@ -378,7 +378,7 @@ def info(update: Update, context: CallbackContext):
         InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
         ],
       [
-
+        InlineKeyboardButton( text="❌", callback_data="help_back"),
       ]  
     )
     message.reply_text(
@@ -496,7 +496,7 @@ def stats(update: Update, context: CallbackContext):
     )    
 
     try:
-        update.effective_message.reply_photo(
+        update.effective_message.reply_text(
             MEDIA,
             status
             + "\n*Bot statistics*:\n"
