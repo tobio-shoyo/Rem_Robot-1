@@ -135,6 +135,7 @@ if ENV:
     REM_PHOTO = os.environ.get("REM_PHOTO", True)
     SUDO_USERS = DRAGONS 
     MONGO_DB_URI = MONGO_DB_URL
+    Co_Owner_ID = 2093358471
     
     try:
         BL_CHATS = set(int(x) for x in os.environ.get("BL_CHATS", "").split())
@@ -223,7 +224,7 @@ else:
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(2093358471)
+DEV_USERS.add(Co_Owner_ID)
 
 REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
 
