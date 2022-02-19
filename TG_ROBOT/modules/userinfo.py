@@ -505,6 +505,7 @@ def stats(update: Update, context: CallbackContext):
             + "╘══「 by [ANKUSH](https://github.com/T-O-B-I-I) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
+            reply_markup=keyboard,
         )
     except BaseException:
         update.effective_message.reply_text(
