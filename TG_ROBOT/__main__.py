@@ -1,30 +1,3 @@
-"""
-MIT License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 T-O-B-I-I
-Copyright (c) 2021, AOGIRI, <https://github.com/T-O-B-I-I/REM_Robot>
-
-This file is part of @RemCutebot (Telegram Bot)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 
 import html
 import os
@@ -94,26 +67,6 @@ from telegram.utils.helpers import escape_markdown
 from pyrogram import Client, idle
 from telethon import Button, events
 
-@telethn.on(events.NewMessage(pattern="/alive"))
-async def awake(event):
-  REM = event.sender.first_name
-  REM = "**♡ I,m REM Robot ** \n\n"
-  REM += "**♡ I'm Working With Awesome Speed**\n\n"
-  REM += "**♡ REM: LATEST Version**\n\n"
-  REM += "**♡ My Creator:** [ANKSUH](t.me/INTERVIER_RRRR)\n\n"
-  REM += "**♡ python-Telegram-Bot: 13.7**\n\n"
-  REM_BUTTON = [
-      [
-          Button.url("🚑 Support", f"https://t.me/{SUPPORT_CHAT}"),
-          Button.url("📢 Updates", "https://t.me/Black_Knights_Union")
-      ]
-  ]
-  await telethn.send_file(
-      event.chat_id,
-      REM_PHOTO,
-      caption = REM,
-      buttons = REM_BUTTON,
-  )
 
     
 def get_readable_time(seconds: int) -> str:
@@ -257,8 +210,8 @@ def send_help(chat_id, text, keyboard=None):
 
 
 def test(update: Update, context: CallbackContext):
-    # pprint(eval(str(update)))
-    # update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
+    print(eval(str(update)))
+    update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
     update.effective_message.reply_text("This person edited a message")
     print(update.effective_message)
 
@@ -317,11 +270,11 @@ def start(update: Update, context: CallbackContext):
                 [
                     [
                         InlineKeyboardButton(
-                            text="🚑 Support",
+                            text="Support",
                             url=f"https://telegram.dog/{SUPPORT_CHAT}",
                         ),
                         InlineKeyboardButton(
-                            text="📢 Updates",
+                            text="Updates",
                             url="https://telegram.dog/Rem_updates",
                         ),
                     ]
@@ -440,9 +393,12 @@ def help_button(update, context):
                 ),
             )
 
+        
         # ensure no spinny white circle
         context.bot.answer_callback_query(query.id)
-        # query.message.delete()
+        query.message.delete()
+
+        
 
     except BadRequest:
         pass
@@ -636,7 +592,6 @@ def settings_button(update: Update, context: CallbackContext):
 
         # ensure no spinny white circle
         bot.answer_callback_query(query.id)
-        
         query.message.delete()
     except BadRequest as excp:
         if excp.message not in [
@@ -645,6 +600,9 @@ def settings_button(update: Update, context: CallbackContext):
             "Message can't be deleted",
         ]:
             LOGGER.exception("Exception in settings buttons. %s", str(query.data))
+
+
+
 
 
 def get_settings(update: Update, context: CallbackContext):
@@ -733,6 +691,22 @@ def migrate_chats(update: Update, context: CallbackContext):
     raise DispatcherHandlerStop
     
 def main():
+
+    if SUPPORT_CHAT is not None and isinstance(SUPPORT_CHAT, str):
+        try:
+            dispatcher.bot.sendMessage(
+                f"@{SUPPORT_CHAT}",
+                "[Yes I'm alive now!]()",
+                parse_mode=ParseMode.MARKDOWN,
+            )
+        except Unauthorized:
+            LOGGER.warning(
+                "Bot isnt able to send message to support_chat, go and check!"
+            )
+        except BadRequest as e:
+            LOGGER.warning(e.message)
+
+            
     test_handler = DisableAbleCommandHandler("test", test, run_async=True)
     start_handler = DisableAbleCommandHandler("start", start, run_async=True)
 
