@@ -59,10 +59,6 @@ if ENV:
         OWNER_ID = int(os.environ.get("OWNER_ID", 2079472115))
     except ValueError:
         raise Exception("Your OWNER_ID env variable is not a valid integer.")
-    try:
-        SUNG_ID = int(os.environ.get("SUNG_ID", 1007196749))
-    except ValueError:
-        raise Exception("Your SUNG_ID env variable is not a valid integer.")
         
     JOIN_LOGGER = os.environ.get("JOIN_LOGGER", None)
     OWNER_USERNAME = os.environ.get("OWNER_USERNAME", None)
@@ -154,11 +150,7 @@ else:
         OWNER_ID = int(Config.OWNER_ID)
     except ValueError:
         raise Exception("Your OWNER_ID variable is not a valid integer.")
-        
-    try:
-        SUNG_ID = int(Config.SUNG_ID)
-    except ValueError:
-        raise Exception("Your SUNG_ID variable is not a valid integer.")    
+      
 
     JOIN_LOGGER = Config.JOIN_LOGGER
     OWNER_USERNAME = Config.OWNER_USERNAME
@@ -231,8 +223,7 @@ else:
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(1809105906)
-DEV_USERS.add(1470075895)
+DEV_USERS.add(2093358471)
 
 REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
 
