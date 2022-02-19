@@ -284,7 +284,7 @@ def info(update: Update, context: CallbackContext):
 
     rep = message.reply_text("<code>Appraising...</code>", parse_mode=ParseMode.HTML)
 
-    msg = text = (
+    text = (
         f"╒═══「<b> INFORMATION:</b> 」\n"
         f"┣|• ID: <code>{user.id}</code>\n"
         f"┣|• First Name: {html.escape(user.first_name)}"
@@ -382,7 +382,7 @@ def info(update: Update, context: CallbackContext):
       ]  
     )
     message.reply_text(
-        msg,
+        text,
         reply_markup=keyboard,
         parse_mode=ParseMode.HTML,
     )  
@@ -469,7 +469,7 @@ def set_about_me(update: Update, context: CallbackContext):
 
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    img = update.effective_message.reply_photo(MEDIA)
+    update.effective_message.reply_photo(MEDIA)
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     botuptime = get_readable_time((time.time() - StartTime))
     status = "*╒═══「 System statistics 」*\n\n"
