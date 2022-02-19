@@ -297,7 +297,7 @@ def info(update: Update, context: CallbackContext):
         text += f"\n┣|• Username: @{html.escape(user.username)}"
 
     text += f"\n┣|• Userlink: {mention_html(user.id, 'link')}"
-    text += "\n✪ Pfp Count: {}".format(
+    text += "\n┣|• Pfp Count: {}".format(
         context.bot.get_user_profile_photos(user.id).total_count
     )
 
