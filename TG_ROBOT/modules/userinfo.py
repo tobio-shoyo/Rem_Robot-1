@@ -71,7 +71,7 @@ from TG_ROBOT.modules.helper_funcs.chat_status import sudo_plus
 from TG_ROBOT.modules.helper_funcs.extraction import extract_user
 from TG_ROBOT import telethn
 
-MEDIA = "https://telegra.ph/file/18003d496d603690fa2c6.jpg"
+MEDIA = "https://telegra.ph/file/5f5b2456b372f3f48dddd.jpg"
 
 def no_by_per(totalhp, percentage):
     """
@@ -469,7 +469,7 @@ def set_about_me(update: Update, context: CallbackContext):
 
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    update.effective_message.reply_photo(MEDIA)
+    img = update.effective_message.reply_photo(MEDIA)
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     botuptime = get_readable_time((time.time() - StartTime))
     status = "*╒═══「 System statistics 」*\n\n"
@@ -489,7 +489,8 @@ def stats(update: Update, context: CallbackContext):
     status += "*➢ python-Telegram-Bot:* " + str(ptbver) + "\n"
     status += "*➢ Uptime:* " + str(botuptime) + "\n"
     try:
-        update.effective_message.reply_text(
+        update.effective_message.reply_photo(
+            MEDIA, caption=
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
