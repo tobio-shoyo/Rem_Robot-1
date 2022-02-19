@@ -518,10 +518,10 @@ def stats(update: Update, context: CallbackContext):
     
     try:
         update.effective_message.reply_photo(
-            img,caption=( status,  + "\n*Bot statistics*:\n"
+            img
+            + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
             + f"\n\n[✦ Support](https://t.me/{SUPPORT_CHAT}) | [✦ Updates](https://t.me/Rem_updates)\n\n"
-            )
             + "╘══「 by [ANKUSH](https://github.com/T-O-B-I-I) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
