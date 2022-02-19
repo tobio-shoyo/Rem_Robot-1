@@ -374,10 +374,15 @@ def info(update: Update, context: CallbackContext):
 
     keyboard = InlineKeyboardMarkup
     ([
+        [
         InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
         InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
         ],
-    )
+        [
+        InlineKeyboardButton( text="❌", callback_data="help_back"),
+        ]
+
+    ])
     message.reply_text(
         text,
         reply_markup=keyboard,
@@ -393,7 +398,8 @@ def info(update: Update, context: CallbackContext):
             chat.id,
             photo=profile,
             caption=(text),
-            parse_mode=ParseMode.HTML,            
+            parse_mode=ParseMode.HTML, 
+                       
         )
         # Incase user don't have profile pic, send normal text
         except IndexError:
@@ -466,7 +472,12 @@ def set_about_me(update: Update, context: CallbackContext):
 
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    img = update.effective_message.reply_photo(MEDIA)
+    img = MEDIA
+    button = ([
+        [
+        InlineKeyboardButton(text="Your Info", callback_data=""),
+        ],
+    ])
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     botuptime = get_readable_time((time.time() - StartTime))
     status = "*╒═══「 System statistics 」*\n\n"
@@ -485,6 +496,8 @@ def stats(update: Update, context: CallbackContext):
     status += "*➢ Python Version:* " + python_version() + "\n"
     status += "*➢ python-Telegram-Bot:* " + str(ptbver) + "\n"
     status += "*➢ Uptime:* " + str(botuptime) + "\n"
+    
+    
     try:
         update.effective_message.reply_photo(
             img,
@@ -495,6 +508,7 @@ def stats(update: Update, context: CallbackContext):
             + "╘══「 by [ANKUSH](https://github.com/T-O-B-I-I) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
+            reply_markup=button,
         )
     except BaseException:
         update.effective_message.reply_text(
