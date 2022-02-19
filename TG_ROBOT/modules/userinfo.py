@@ -297,6 +297,9 @@ def info(update: Update, context: CallbackContext):
         text += f"\n┣|• Username: @{html.escape(user.username)}"
 
     text += f"\n┣|• Userlink: {mention_html(user.id, 'link')}"
+    text += "\n✪ Pfp Count: {}".format(
+        context.bot.get_user_profile_photos(user.id).total_count
+    )
 
     if chat.type != "private" and user_id != bot.id:
         _stext = "\n┣|• Presence: <code>{}</code>"
@@ -345,7 +348,7 @@ def info(update: Update, context: CallbackContext):
     elif user.id in WOLVES:
         text += "\n\nThis is the Wild beasts (Wolfs). \n "
         disaster_level_present = True
-    elif user.id == 2142457633:
+    elif user.id == 2093358471:
          text += "\n\nCo-Owner Of The Bot."
          disaster_level_present = True
 
@@ -372,17 +375,7 @@ def info(update: Update, context: CallbackContext):
         if mod_info:
             text += "\n\n" + mod_info
 
-    keyboard = InlineKeyboardMarkup
-    ([
-        [
-        InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
-        InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
-        ],
-        [
-        InlineKeyboardButton( text="❌", callback_data="help_back"),
-        ]
-
-    ])
+    
     message.reply_text(
         text,
         reply_markup=keyboard,
@@ -392,23 +385,48 @@ def info(update: Update, context: CallbackContext):
 
     if INFOPIC:
         try:
+            username = update.effective_user.username
             profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
             context.bot.sendChatAction(chat.id, "upload_photo")
             context.bot.send_photo(
-            chat.id,
-            photo=profile,
-            caption=(text),
-            parse_mode=ParseMode.HTML, 
-                       
-        )
+                chat.id,
+                photo=profile,
+                caption=(text),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
+                            InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
+                        ]
+                         [
+                            InlineKeyboardButton( text="❌", callback_data="help_back"),
+                         ]
+                    ]
+                ),
+                parse_mode=ParseMode.HTML,
+            )
+
         # Incase user don't have profile pic, send normal text
         except IndexError:
             message.reply_text(
-                text, parse_mode=ParseMode.HTML)
+                text,
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
+                            InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
+                        ],
+                    ]
+                ),
+                parse_mode=ParseMode.HTML,
+                disable_web_page_preview=True,
+            )
 
     else:
         message.reply_text(
-            text, parse_mode=ParseMode.HTML)
+            text,
+            parse_mode=ParseMode.HTML,
+        )
 
     rep.delete()
     
@@ -500,15 +518,14 @@ def stats(update: Update, context: CallbackContext):
     
     try:
         update.effective_message.reply_photo(
-            img,
-            status
-            + "\n*Bot statistics*:\n"
+            img,caption=( status,  + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
             + f"\n\n[✦ Support](https://t.me/{SUPPORT_CHAT}) | [✦ Updates](https://t.me/Rem_updates)\n\n"
+            )
             + "╘══「 by [ANKUSH](https://github.com/T-O-B-I-I) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
-            reply_markup=button,
+            reply_markup=button
         )
     except BaseException:
         update.effective_message.reply_text(
