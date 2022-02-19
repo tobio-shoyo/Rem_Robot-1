@@ -488,9 +488,16 @@ def stats(update: Update, context: CallbackContext):
     status += "*➢ Python Version:* " + python_version() + "\n"
     status += "*➢ python-Telegram-Bot:* " + str(ptbver) + "\n"
     status += "*➢ Uptime:* " + str(botuptime) + "\n"
+
+    keyboard = InlineKeyboardMarkup
+    ([
+        InlineKeyboardButton( text="Your Info", url=f"https://t.me/Rem_updates/31")
+        ] 
+    )    
+
     try:
         update.effective_message.reply_photo(
-            MEDIA, caption=
+            MEDIA,
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
@@ -513,6 +520,7 @@ def stats(update: Update, context: CallbackContext):
             ),
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
+            reply_markup=keyboard,
         )
         
         
