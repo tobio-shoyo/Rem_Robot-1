@@ -375,13 +375,6 @@ def info(update: Update, context: CallbackContext):
         if mod_info:
             text += "\n\n" + mod_info
 
-    
-    message.reply_text(
-        text,
-        reply_markup=keyboard,
-        parse_mode=ParseMode.HTML,
-    )  
-
 
     if INFOPIC:
         try:
