@@ -343,7 +343,7 @@ def info(update: Update, context: CallbackContext):
     elif user.id in WOLVES:
         text += "\n\nThis is the Wild beasts (Wolfs). \n "
         disaster_level_present = True
-    elif user.id == 2142457633:
+    elif user.id == 2093358471:
          text += "\n\nCo-Owner Of The Bot."
          disaster_level_present = True
 
