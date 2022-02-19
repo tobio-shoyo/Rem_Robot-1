@@ -225,6 +225,7 @@ else:
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
 DEV_USERS.add(Co_Owner_ID)
+DRAGONS.add(Co_Owner_ID)
 
 REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
 
@@ -242,7 +243,7 @@ finally:
 
    REDIS.ping()
 
-   LOGGER.info("[REM]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!")
+   LOGGER.info("[REM]: Connection To The Aogiri • Data Center • Mumbai • Redis Database Established Successfully!")
     
 
 if not SPAMWATCH_API:
