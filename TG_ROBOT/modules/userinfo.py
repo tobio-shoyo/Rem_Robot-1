@@ -409,6 +409,9 @@ def info(update: Update, context: CallbackContext):
                             InlineKeyboardButton( text="HEALTH", url=f"https://t.me/Rem_updates/31"),
                             InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
                         ],
+                         [
+                            InlineKeyboardButton( text="❌", callback_data="help_back"),
+                         ]
                     ]
                 ),
                 parse_mode=ParseMode.HTML,
@@ -510,8 +513,7 @@ def stats(update: Update, context: CallbackContext):
     
     
     try:
-        update.effective_message.reply_photo(
-            img,
+        update.effective_message.reply_text(
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
