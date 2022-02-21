@@ -396,12 +396,30 @@ def help_button(update, context):
         
         # ensure no spinny white circle
         context.bot.answer_callback_query(query.id)
-        query.message.delete()
+        #query.message.delete()
 
         
 
     except BadRequest:
         pass
+
+def close_button(update, context):
+    query = update.callback_query
+    close_match = re.match(r"close_back", query.data)
+
+    print(query.message.chat.id)
+
+    try:
+        if close_match:
+            query.answer("Deleted...", show_alert=True)
+        # ensure no spinny white circle
+        context.bot.answer_callback_query(query.id)
+        query.message.delete()
+        
+
+    except BadRequest:
+        pass
+
 
 def REM_callback_data(update, context):
     query = update.callback_query
@@ -696,7 +714,7 @@ def main():
         try:
             dispatcher.bot.sendMessage(
                 f"@{SUPPORT_CHAT}",
-                "[Yes I'm alive now!](https://telegra.ph/file/18003d496d603690fa2c6.jpg)",
+                "[Yes I'm alive now!]()",
                 parse_mode=ParseMode.MARKDOWN,
             )
         except Unauthorized:
