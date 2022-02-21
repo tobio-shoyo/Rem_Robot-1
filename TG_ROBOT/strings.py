@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
-from TG_ROBOT import SUPPORT_CHAT
+from TG_ROBOT import SUPPORT_CHAT, BOT_USERNAME
 
 
 HELP_MSG = "Click the button below to get help manu in your pm."
@@ -26,7 +26,7 @@ Haven't slept since: {}
 buttons = [
 
     [
-        InlineKeyboardButton(text="ꜱᴜᴍᴍᴏɴ ᴍᴇ",url=f"t.me/RemCutebot?startgroup=true"),
+        InlineKeyboardButton(text="ꜱᴜᴍᴍᴏɴ ᴍᴇ",url=f"t.me/{BOT_USERNAME}?startgroup=true"),
     ],
 
     [

@@ -1,33 +1,8 @@
-"""
-MIT License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 T-O-B-I-I
-Copyright (c) 2021, AOGIRI, <https://github.com/T-O-B-I-I/REM_Robot>
-
-This file is part of @RemCutebot (Telegram Bot)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
-
 import html
+import asyncio
 import os
+import random
+from asyncio import QueueEmpty
 import json
 import importlib
 import time
@@ -39,6 +14,7 @@ import TG_ROBOT.modules.sql.users_sql as sql
 
 from sys import argv
 from typing import Optional
+from pyrogram import filters
 from TG_ROBOT import (
     ALLOW_EXCL,
     CERT_PATH,
@@ -50,7 +26,6 @@ from TG_ROBOT import (
     URL,
     WEBHOOK,
     SUPPORT_CHAT,
-    BOT_USERNAME,
     BOT_NAME,
     EVENT_LOGS,
     HELP_IMG,
@@ -62,6 +37,7 @@ from TG_ROBOT import (
     updater,
     pgram,
     ubot,
+    pbot,
     )
 
 # needed to dynamically load modules
@@ -370,14 +346,17 @@ def help_button(update, context):
         pass
 
 
-def close_button(update, context):
-    query = update.callback_query
-    if query.data == "close_back":
-        query.answer("Deleted...", show_alert=True)
-        # ensure no spinny white circle
-        context.bot.answer_callback_query(query.id)
-        query.message.delete()
-
+@pbot.on_callback_query(filters.regex("forceclose"))
+async def forceclose(_, CallbackQuery):
+    callback_data = CallbackQuery.data.strip()
+    callback_request = callback_data.split(None, 1)[1]
+    query, user_id = callback_request.split("|")
+    if CallbackQuery.from_user.id != int(user_id):
+        return await CallbackQuery.answer(
+            "You're not allowed to close this.", show_alert=True
+        )
+    await CallbackQuery.message.delete()
+    await CallbackQuery.answer()
 
 def REM_callback_data(update, context):
     query = update.callback_query
