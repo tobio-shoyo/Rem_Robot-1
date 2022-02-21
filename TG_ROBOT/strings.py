@@ -2,6 +2,9 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Upda
 from TG_ROBOT import SUPPORT_CHAT
 
 
+HELP_MSG = "Click the button below to get help manu in your pm."
+START_MSG = "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
+
 PM_START_TEXT = """
 ────「 [{}](https://telegra.ph/file/0f9ea77c82c47bcf80c71.jpg) 」────
 *Hola! {},*
