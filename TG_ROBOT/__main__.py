@@ -360,7 +360,7 @@ def help_button(update, context):
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
+                    [[InlineKeyboardButton(text="[ Back ]", callback_data="help_back")]]
                 ),
             )
 
@@ -405,20 +405,11 @@ def help_button(update, context):
 
 def close_button(update, context):
     query = update.callback_query
-    close_match = re.match(r"close_back", query.data)
-
-    print(query.message.chat.id)
-
-    try:
-        if close_match:
-            query.answer("Deleted...", show_alert=True)
+    if query.data == "close_back":
+        query.answer("Deleted...", show_alert=True)
         # ensure no spinny white circle
         context.bot.answer_callback_query(query.id)
         query.message.delete()
-        
-
-    except BadRequest:
-        pass
 
 
 def REM_callback_data(update, context):
