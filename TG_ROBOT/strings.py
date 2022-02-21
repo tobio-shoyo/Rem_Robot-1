@@ -1,4 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from TG_ROBOT import SUPPORT_CHAT
+
 
 PM_START_TEXT = """
 ────「 [{}](https://telegra.ph/file/0f9ea77c82c47bcf80c71.jpg) 」────
