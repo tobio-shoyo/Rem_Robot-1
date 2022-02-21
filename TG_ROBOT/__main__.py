@@ -97,27 +97,7 @@ def get_readable_time(seconds: int) -> str:
 
 
 
-buttons = [
 
-    [
-        InlineKeyboardButton(text="ꜱᴜᴍᴍᴏɴ ᴍᴇ",url=f"t.me/RemCutebot?startgroup=true"),
-    ],
-
-    [
-        InlineKeyboardButton(text="ᴜᴘᴅᴀᴛᴇꜱ", url="https://t.me/Rem_updates"),
-        InlineKeyboardButton(text="ᴅᴇᴍᴏɪᴄ ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
-    ],
-
-    [
-        InlineKeyboardButton(text="ᴅᴇᴍᴏɴꜱ ʟᴏɢꜱ", url="https://t.me/Rem_logs" ),
-        InlineKeyboardButton(text="ɢʀᴏᴜᴘ", url=f"https://t.me/AnimeChatAura"),
-    ],
-
-  [   
-      InlineKeyboardButton(text="❕ꜱᴘɪʀɪᴛ ᴀʀᴛꜱ❕", callback_data="help_back") , 
-    ],
-
-]
 
                     
 
@@ -310,7 +290,7 @@ def start(update: Update, context: CallbackContext):
                     escape_markdown(uptime),
                     sql.num_users(),
                     sql.num_chats()),                        
-                reply_markup=InlineKeyboardMarkup(buttons),
+                reply_markup=InlineKeyboardMarkup(string.buttons),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
             )

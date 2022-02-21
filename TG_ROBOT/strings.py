@@ -1,3 +1,5 @@
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+
 PM_START_TEXT = """
 ────「 [{}](https://telegra.ph/file/0f9ea77c82c47bcf80c71.jpg) 」────
 *Hola! {},*
@@ -15,6 +17,28 @@ GROUP_START_TEXT = """
 I'm awake already!
 Haven't slept since: {}
 """
+
+buttons = [
+
+    [
+        InlineKeyboardButton(text="ꜱᴜᴍᴍᴏɴ ᴍᴇ",url=f"t.me/RemCutebot?startgroup=true"),
+    ],
+
+    [
+        InlineKeyboardButton(text="ᴜᴘᴅᴀᴛᴇꜱ", url="https://t.me/Rem_updates"),
+        InlineKeyboardButton(text="ᴅᴇᴍᴏɪᴄ ꜱᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_CHAT}"),
+    ],
+
+    [
+        InlineKeyboardButton(text="ᴅᴇᴍᴏɴꜱ ʟᴏɢꜱ", url="https://t.me/Rem_logs" ),
+        InlineKeyboardButton(text="ɢʀᴏᴜᴘ", url=f"https://t.me/AnimeChatAura"),
+    ],
+
+  [   
+      InlineKeyboardButton(text="❕ꜱᴘɪʀɪᴛ ᴀʀᴛꜱ❕", callback_data="help_back") , 
+    ],
+
+]
 
 HELP_STRINGS = """
 *Main* commands available:
