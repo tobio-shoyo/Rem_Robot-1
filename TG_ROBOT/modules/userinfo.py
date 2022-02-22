@@ -410,7 +410,7 @@ def info(update: Update, context: CallbackContext):
                             InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
                         ],
                          [
-                            InlineKeyboardButton( text="❌", callback_data="foreclose"),
+                            InlineKeyboardButton( text="❌", callback_data="forceclose"),
                          ]
                     ]
                 ),
@@ -515,6 +515,7 @@ def stats(update: Update, context: CallbackContext):
     try:
         update.effective_message.reply_photo(
             img,
+            reply
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
@@ -522,7 +523,7 @@ def stats(update: Update, context: CallbackContext):
             + "╘══「 by [ANKUSH](https://github.com/T-O-B-I-I) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
-            
+            reply_markup = button
         )
     except BaseException:
         update.effective_message.reply_text(
