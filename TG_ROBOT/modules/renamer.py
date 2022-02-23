@@ -1,4 +1,4 @@
-from VegetaRobot import pgram as bot , SUPPORT_CHAT
+from TG_ROBOT import pgram as bot , SUPPORT_CHAT
 import os
 from pyrogram import filters
 
