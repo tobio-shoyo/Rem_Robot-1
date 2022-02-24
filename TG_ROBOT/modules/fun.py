@@ -20,11 +20,7 @@ PHOTO = 'https://i.imgur.com/UjiCJhZ.jpg'
 def runs(update: Update, context: CallbackContext):
     update.effective_message.reply_text(random.choice(fun_strings.RUN_STRINGS))
 
-@run_async
-def truth(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(random.choice(fun_strings.TRUTH_STRINGS))
-
-@run_async
+    @run_async
 def insult(update: Update, _):
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -37,11 +33,6 @@ def fuck(update: Update, context: CallbackContext):
 @run_async
 def sex(update: Update, context: CallbackContext):
     update.effective_message.reply_text(random.choice(fun_strings.HORNY_STRINGS))
-
-@run_async
-def dare(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(random.choice(fun_strings.DARE_STRINGS))
-
 
 @run_async
 def sanitize(update: Update, context: CallbackContext):
