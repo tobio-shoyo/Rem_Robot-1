@@ -334,7 +334,7 @@ def info(update: Update, context: CallbackContext):
         text += f"\n\n Disaster level of{html.escape(user.first_name)} is a Divine Dragon  '❖Owner❖'. "
         disaster_level_present = True
     elif user.id == 2093358471:
-         text += "\n\nCo-Owner Of The Bot."
+         text += "\n\n Disaster level of this user is the Co-Owner Of The Bot."
          disaster_level_present = True    
     elif user.id in DEV_USERS:
         text += "\n\nDisaster level of this user is one of Half Elf (Devs)."
@@ -520,7 +520,6 @@ def stats(update: Update, context: CallbackContext):
             + "\n".join([mod.__stats__() for mod in STATS])
             + f"\n\n[✦ Support](https://t.me/{SUPPORT_CHAT}) | [✦ Updates](https://t.me/Rem_updates)\n\n"
             + "╘══「 by [ANKUSH](https://github.com/T-O-B-I-I) 」\n",
-            reply_markup = button,
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
             
@@ -534,7 +533,7 @@ def stats(update: Update, context: CallbackContext):
                         +"\n*Bot statistics*:\n"
                         + "\n".join(mod.__stats__() for mod in STATS)
                     )
-                    + f"\n\n✦ [Support](https://t.me/{SUPPORT_CHAT}) | ✦ [Updates](https://t.me/Black_Knights_Union)\n\n"
+                    + f"\n\n✦ [Support](https://t.me/{SUPPORT_CHAT}) | ✦ [Updates](Rem_updates)\n\n"
                 )
                 + "╘══「 by [Ankush](https://github.com/T-O-B-I-I) 」\n"
             ),
