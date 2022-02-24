@@ -323,10 +323,8 @@ WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify)
 
 dispatcher.add_handler(WEEBIFY_HANDLER)
 dispatcher.add_handler(INSULT_HANDLER)
-dispatcher.add_handler(TRUTH_HANDLER)
 dispatcher.add_handler(FUCK_HANDLER)
 dispatcher.add_handler(SEX_HANDLER)
-dispatcher.add_handler(DARE_HANDLER)
 dispatcher.add_handler(SHOUT_HANDLER)
 dispatcher.add_handler(SANITIZE_HANDLER)
 dispatcher.add_handler(RUNS_HANDLER)
@@ -376,8 +374,6 @@ __handlers__ = [
     WEEBIFY_HANDLER,
     EIGHTBALL_HANDLER,
     INSULT_HANDLER,
-    TRUTH_HANDLER, 
-    DARE_HANDLER,
     FUCK_HANDLER,
     SEX_HANDLER
 ]
