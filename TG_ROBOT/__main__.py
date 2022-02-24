@@ -675,7 +675,7 @@ def main():
     migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats, run_async=True)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*", run_async=True)
     settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_", run_async=True)
-    close_callback_handler = CallbackQueryHandler(forceclose, pattern=r"cls", run_async=True)
+    close_handler = CallbackQueryHandler(forceclose, pattern=r"cls", run_async=True)
     data_callback_handler = CallbackQueryHandler(REM_callback_data, pattern=r"REM_", run_async=True)
 
     # dispatcher.add_handler(test_handler)
