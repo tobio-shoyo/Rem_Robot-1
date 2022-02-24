@@ -345,13 +345,18 @@ def help_button(update, context):
     except BadRequest:
         pass
 
-
+    
 @Client.on_callback_query(filters.regex("cls"))
-async def close(_, CallbackQuery):
-    a = await _.get_chat_member(CallbackQuery.message.chat.id, CallbackQuery.from_user.id)
-    if not a.can_post_messages:
-        return await CallbackQuery.answer("💡 only admin with manage voice chats permission that can tap this button !", show_alert=True)
+async def forceclose(_, CallbackQuery):
+    callback_data = CallbackQuery.data.strip()
+    callback_request = callback_data.split(None, 1)[1]
+    query, user_id = callback_request.split("|")
+    if CallbackQuery.from_user.id != int(user_id):
+        return await CallbackQuery.answer(
+            "You're not allowed to close this.", show_alert=True
+        )
     await CallbackQuery.message.delete()
+    await CallbackQuery.answer()    
 
 def REM_callback_data(update, context):
     query = update.callback_query
