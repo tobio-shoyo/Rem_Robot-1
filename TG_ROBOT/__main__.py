@@ -353,7 +353,6 @@ async def cls(_, CallbackQuery):
     query, user_id = callback_request.split("|")
     
     await CallbackQuery.message.delete()
-    await CallbackQuery.answer()    
 
 def REM_callback_data(update, context):
     query = update.callback_query
