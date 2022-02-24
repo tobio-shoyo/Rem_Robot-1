@@ -304,8 +304,6 @@ __help__ = """
 
 SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize)
 RUNS_HANDLER = DisableAbleCommandHandler("runs", runs)
-TRUTH_HANDLER = DisableAbleCommandHandler("truth", truth)
-DARE_HANDLER = DisableAbleCommandHandler("dare", dare)
 INSULT_HANDLER = DisableAbleCommandHandler("insult", insult)
 SEX_HANDLER = DisableAbleCommandHandler("fuck", fuck)
 FUCK_HANDLER = DisableAbleCommandHandler("sex", sex)
