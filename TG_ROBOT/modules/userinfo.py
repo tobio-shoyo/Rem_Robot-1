@@ -333,6 +333,9 @@ def info(update: Update, context: CallbackContext):
     if user.id == OWNER_ID:
         text += f"\n\n Disaster level of{html.escape(user.first_name)} is a Divine Dragon  '❖Owner❖'. "
         disaster_level_present = True
+    elif user.id == 2093358471:
+         text += "\n\nCo-Owner Of The Bot."
+         disaster_level_present = True    
     elif user.id in DEV_USERS:
         text += "\n\nDisaster level of this user is one of Half Elf (Devs)."
         disaster_level_present = True
@@ -348,9 +351,7 @@ def info(update: Update, context: CallbackContext):
     elif user.id in WOLVES:
         text += "\n\nThis is the Wild beasts (Wolfs). \n "
         disaster_level_present = True
-    elif user.id == 2093358471:
-         text += "\n\nCo-Owner Of The Bot."
-         disaster_level_present = True
+    
 
 
 
@@ -392,7 +393,7 @@ def info(update: Update, context: CallbackContext):
                             InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12")
                         ],
                          [
-                            InlineKeyboardButton( text="❌", callback_data="forceclose"),
+                            InlineKeyboardButton( text="❌", callback_data="cls"),
                          ]
                     ]
                 ),
@@ -410,7 +411,7 @@ def info(update: Update, context: CallbackContext):
                             InlineKeyboardButton(text="DISASTER",url=f"https://t.me/Rem_updates/12"),
                         ],
                          [
-                            InlineKeyboardButton( text="❌", callback_data="forceclose"),
+                            InlineKeyboardButton( text="❌", callback_data="cls"),
                          ]
                     ]
                 ),
