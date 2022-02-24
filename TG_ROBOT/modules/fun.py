@@ -20,7 +20,7 @@ PHOTO = 'https://i.imgur.com/UjiCJhZ.jpg'
 def runs(update: Update, context: CallbackContext):
     update.effective_message.reply_text(random.choice(fun_strings.RUN_STRINGS))
 
-    @run_async
+@run_async
 def insult(update: Update, _):
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
