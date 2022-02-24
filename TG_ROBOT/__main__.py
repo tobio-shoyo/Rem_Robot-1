@@ -346,7 +346,7 @@ def help_button(update, context):
         pass
 
     
-@pbot.on_callback_query(filters.regex("cls"))
+@Client.on_callback_query(filters.regex("cls"))
 async def cls(_, CallbackQuery):
     callback_data = CallbackQuery.data.strip()
     callback_request = callback_data.split(None, 1)[1]
