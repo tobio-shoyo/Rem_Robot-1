@@ -669,7 +669,6 @@ def main():
     donate_handler = DisableAbleCommandHandler("donate", donate, run_async=True)
     migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats, run_async=True)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*", run_async=True)
-    close_callback_handler = CallbackQueryHandler(close_button, pattern=r"close_*", run_async=True)
     settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_", run_async=True)
     data_callback_handler = CallbackQueryHandler(REM_callback_data, pattern=r"REM_", run_async=True)
 
@@ -682,7 +681,6 @@ def main():
     dispatcher.add_handler(settings_callback_handler)
     dispatcher.add_handler(migrate_handler)
     dispatcher.add_handler(donate_handler)
-    dispatcher.add_handler(close_callback_handler)
 
     dispatcher.add_error_handler(error_callback)
 
